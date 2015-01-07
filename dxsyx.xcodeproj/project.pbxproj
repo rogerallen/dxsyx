@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20BFC311A5DF967005D457D /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = E20BFC2F1A5DF967005D457D /* README.md */; };
 		E2B8A02B1A5BBBB6006AF942 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2B8A02A1A5BBBB6006AF942 /* main.cpp */; };
+		E2B8A0331A5BBCC6006AF942 /* dxsyx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2B8A0321A5BBCC6006AF942 /* dxsyx.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +25,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E20BFC2F1A5DF967005D457D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E20BFC301A5DF967005D457D /* dx7-sysex-format.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dx7-sysex-format.txt"; sourceTree = "<group>"; };
 		E2B8A0271A5BBBB6006AF942 /* dxsyx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dxsyx; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2B8A02A1A5BBBB6006AF942 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E2B8A0311A5BBC75006AF942 /* dxsyx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dxsyx.h; sourceTree = "<group>"; };
+		E2B8A0321A5BBCC6006AF942 /* dxsyx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dxsyx.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +47,8 @@
 		E2B8A01E1A5BBBB6006AF942 = {
 			isa = PBXGroup;
 			children = (
+				E20BFC2F1A5DF967005D457D /* README.md */,
+				E20BFC301A5DF967005D457D /* dx7-sysex-format.txt */,
 				E2B8A0291A5BBBB6006AF942 /* dxsyx */,
 				E2B8A0281A5BBBB6006AF942 /* Products */,
 			);
@@ -58,6 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				E2B8A02A1A5BBBB6006AF942 /* main.cpp */,
+				E2B8A0311A5BBC75006AF942 /* dxsyx.h */,
+				E2B8A0321A5BBCC6006AF942 /* dxsyx.cpp */,
 			);
 			path = dxsyx;
 			sourceTree = "<group>";
@@ -118,6 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E20BFC311A5DF967005D457D /* README.md in Sources */,
+				E2B8A0331A5BBCC6006AF942 /* dxsyx.cpp in Sources */,
 				E2B8A02B1A5BBBB6006AF942 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +214,7 @@
 		E2B8A02F1A5BBBB6006AF942 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INSTALL_PATH = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +222,7 @@
 		E2B8A0301A5BBBB6006AF942 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INSTALL_PATH = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -232,6 +246,7 @@
 				E2B8A0301A5BBBB6006AF942 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
