@@ -9,9 +9,10 @@
 #ifndef dxsyx_dxsyx_h
 #define dxsyx_dxsyx_h
 
-#include <iostream>
 #include <array>
 #include <cstdint>
+#include <iostream>
+#include <vector>
 
 // This only handles 32-voice packed DX7 .syx files
 const int SYX_FILE_SIZE  = 4096 + 8;
@@ -23,7 +24,7 @@ class DxSyx;  // declare so Osc, Voice can use
 // ======================================================================
 // http://stackoverflow.com/questions/270947/can-any-one-provide-me-a-sample-of-singleton-in-c/271104#271104
 
-enum class DxSyxPrintMode { Names, Full };
+enum class DxSyxOutputMode { Full, Names, Syx };
 class DxSyxConfig
 {
 public:
@@ -32,7 +33,9 @@ public:
         static DxSyxConfig instance;
         return instance;
     }
-    DxSyxPrintMode print_mode = DxSyxPrintMode::Names;
+    std::string config_filename;
+    std::string output_filename;
+    DxSyxOutputMode print_mode = DxSyxOutputMode::Names;
     
 private:
     DxSyxConfig() {}
@@ -128,6 +131,18 @@ class DxSyx {
 public:
     DxSyx(const char *filename);
     uint8_t GetDataCS();
+    
+    friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
+};
+
+// ======================================================================
+class DxSyxDB {
+    std::vector<DxSyx> _syxs;
+    
+public:
+    DxSyxDB() {}; // default does nothing
+    void add(const DxSyx &s) { _syxs.push_back(s); };
+    void dump();
     
     friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
 };

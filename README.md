@@ -1,32 +1,25 @@
 # dxsyx
 
-FIXME: description
+dxsyx - a C++ library for manipulating DX7 SysEx files.
+
+I created this after using the Dexed VST.  See https://github.com/asb2m10/dexed
+
+
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Build via Xcode or Makefile.
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar dxsyx-0.1.0-standalone.jar [args]
+    $ dxsyx [options] file1.syx file2.syx ...
 
 ## Options
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+    none = print out voices
+    -h = help (this message)
+    -v = print full data as YAML
+    -s config.txt output.syx = select specific voices, output to new syx file
 
 ## License
 

@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/rallen/Music/VST/dexed-0.8.0/Patches/sysex/analog1.syx"
+            argument = "-s config.txt out.syx /Users/rallen/Music/VST/dexed-0.8.0/Patches/sysex/analog1.syx"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

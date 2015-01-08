@@ -77,6 +77,9 @@ DxSyxVoice::DxSyxVoice(DxSyx &dx) {
 }
 
 char DxSyxVoice::FixChar(char c) {
+    if (c < ' ') {
+        return '_';
+    }
     switch (c) {
         case 92: // Yen
             return 'Y';
@@ -184,7 +187,17 @@ uint8_t DxSyx::GetDataCS()
     return d;
 }
 
+void DxSyxDB::dump() {
+    cerr << "FIXME dump syx file" << endl;
+    // read config file
+    // create syx buffer
+    // insert voices
+    // write out data
+}
+
 // ======================================================================
+// Gathered all the print routines together
+
 static void PrintOscLine(std::ostream& os, int n, const char *ds, int d)
 {
     os << "    op" << n << ds << d << endl;
@@ -192,7 +205,7 @@ static void PrintOscLine(std::ostream& os, int n, const char *ds, int d)
 
 std::ostream& operator<<(std::ostream& os, const DxSyxOsc& syx)
 {
-    if (DxSyxConfig::get().print_mode == DxSyxPrintMode::Full) {
+    if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
         PrintOscLine(os, syx._osc_num, "_eg_rate_1: ", syx.syx_eg_rate_1);
         PrintOscLine(os, syx._osc_num, "_eg_rate_2: ", syx.syx_eg_rate_2);
         PrintOscLine(os, syx._osc_num, "_eg_rate_3: ", syx.syx_eg_rate_3);
@@ -218,10 +231,11 @@ std::ostream& operator<<(std::ostream& os, const DxSyxOsc& syx)
     return os;
 }
 
-
 std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx) {
-    os << "  voice_name: " << syx.syx_name << endl;
-    if (DxSyxConfig::get().print_mode == DxSyxPrintMode::Full) {
+    if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
+        os << syx.syx_name;
+    } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
+            os << "  voice_name: " << syx.syx_name << endl;
         for(int i = 0; i < SYX_NUM_OSC; ++i) {
             os << syx.syx_oscs[i];
         }
@@ -251,10 +265,16 @@ std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx) {
 
 ostream& operator<<(ostream& os, const DxSyx& syx)
 {
-    os << "--- " << endl;
-    os << "filename: " << syx._filename << endl;
-    for(int i = 0; i < SYX_NUM_VOICES; ++i) {
-        os << syx.syx_voices[i];
+    if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
+        for(int i = 0; i < SYX_NUM_VOICES; ++i) {
+            os << i << "," << syx.syx_voices[i] << "," << syx._filename << endl;
+        }
+    } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
+        os << "--- " << endl;
+        os << "filename: " << syx._filename << endl;
+        for(int i = 0; i < SYX_NUM_VOICES; ++i) {
+            os << syx.syx_voices[i];
+        }
     }
     return os;
 }
