@@ -29,7 +29,7 @@ void PrintUsage()
     cout << "dxsyx - a DX7 SYSEX file toolkit" << endl;
     cout << endl;
     cout << "usage:" << endl;
-    cout << "  dxsyx [options] file1.syx file2.syx ..." << endl;
+    cout << "  dxsyx [options] [file1.syx file2.syx ...]" << endl;
     cout << "options:" << endl;
     cout << "  -h = help (this message)" << endl;
     cout << "  -v = print full data as YAML" << endl;
@@ -58,7 +58,6 @@ bool parse_arg(int &i, const char **argv)
 int main(int argc, const char * argv[])
 {
     try {
-        DxSyxDB db;
         for(int i = 1; i < argc; ++i) {
             if (argv[i][0] == '-') {
                 if(!parse_arg(i,argv)) {
@@ -66,12 +65,12 @@ int main(int argc, const char * argv[])
                 }
             } else {
                 DxSyx d = DxSyx(argv[i]);
-                db.add(d);
                 cout << d;
             }
         }
         if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Syx) {
-            db.dump();
+            DxSyxDB db;
+            db.DumpSyx();
         }
         return 0;
     } catch (const runtime_error& error) {

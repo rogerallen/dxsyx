@@ -132,7 +132,7 @@ class DxSyx {
        
     std::array<DxSyxVoice, SYX_NUM_VOICES> syx_voices;
     
-    void    ReadFile(const char *filename);
+    void    ReadFile(const std::string &filename);
     void    UnpackSyx();
     void    CheckHeader();
     void    UnpackVoices();
@@ -142,6 +142,7 @@ class DxSyx {
     
 public:
     DxSyx(const char *filename);
+    DxSyx(const std::string &filename);
     uint8_t GetDataCS();
     std::vector<uint8_t> GetVoiceData(int n);
     std::string GetFilename();
@@ -152,15 +153,20 @@ public:
 // ======================================================================
 class DxSyxDB {
     std::vector<DxSyx> _syxs;
+    
     std::vector<std::string> ReadConfigFile();
-    void WriteSyxFile(const uint8_t *data);
-    std::tuple<int, int> DecodeConfigLine(const std::string &line);
-    std::vector<uint8_t> GetVoiceData(const int voice_num, const int syx_num);
+    void                     WriteSyxFile(const uint8_t *data);
+    std::tuple<int, int>     DecodeConfigLine(const std::string &line);
+    std::string              GetConfigLineFilename(const std::string &filename);
+    std::vector<uint8_t>     GetVoiceData(const int voice_num, const int syx_num);
+    int                      FilenameIndex(const std::string filename);
+    void                     AddSyx(const DxSyx &s) {
+        _syxs.push_back(s);
+    };
 
 public:
-    DxSyxDB() {}; // default does nothing
-    void add(const DxSyx &s) { _syxs.push_back(s); };
-    void dump();
+    DxSyxDB();
+    void DumpSyx();
     
     friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
 };

@@ -25,9 +25,8 @@ If you want to select voices and create your own syx file:
 
 Now, edit config.txt to select only the 32 voices you desire
 
-    $ dxsyx -s config.txt my.syx file1.syx file2.syx file3.syx
+    $ dxsyx -s config.txt my.syx 
     
-Note that you need to have the same syx files as inputs in both commands.
 This creates your custom my.syx file with your selected voices.
 
 ## Options

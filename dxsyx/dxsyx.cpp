@@ -112,15 +112,19 @@ char DxSyxVoice::FixChar(char c) {
 
 // ======================================================================
 DxSyx::DxSyx(const char *filename) {
+    DxSyx(string(filename, strnlen(filename,1024)));
+}
+
+DxSyx::DxSyx(const string &filename) {
     //cerr << "reading " << filename << endl;
-    _filename = string(filename, strnlen(filename,1024));
-    _cur_checksum = 0;
+    _filename       = filename;
+    _cur_checksum   = 0;
     _cur_data_index = 0;
-    ReadFile(filename);
+    ReadFile(_filename);
     UnpackSyx();
 }
 
-void DxSyx::ReadFile(const char *filename)
+void DxSyx::ReadFile(const string &filename)
 {
     ifstream fl(filename, ifstream::in|ifstream::binary);
     if(!fl.good()) {
@@ -201,6 +205,16 @@ uint8_t DxSyx::GetDataCS()
 }
 
 // ======================================================================
+DxSyxDB::DxSyxDB() {
+    auto lines = ReadConfigFile();
+    for (auto line : lines) {
+        string syx_filename = GetConfigLineFilename(line);
+        if (FilenameIndex(syx_filename) < 0) {
+            AddSyx(DxSyx(syx_filename));
+        }
+    }
+}
+
 vector<string> DxSyxDB::ReadConfigFile() {
     vector<string> lines;
     string line;
@@ -232,15 +246,31 @@ tuple<int, int> DxSyxDB::DecodeConfigLine(const string &line) {
     string voice_str, file_str;
     getline(ss, voice_str, ',');
     getline(ss, file_str, ',');
-    int voice_num, file_num = 0;
+    int voice_num, file_num = FilenameIndex(file_str);
     istringstream(voice_str) >> voice_num;
+    if (file_num >= 0) {
+        return make_tuple(voice_num, file_num);
+    }
+    throw runtime_error(string("ERROR: did not find file from config file."));
+}
+
+string DxSyxDB::GetConfigLineFilename(const string &line) {
+    stringstream ss(line.substr(11));  // start after name+','
+    string voice_str, file_str;
+    getline(ss, voice_str, ',');
+    getline(ss, file_str, ',');
+    return file_str;
+}
+
+int DxSyxDB::FilenameIndex(const string filename) {
+    int file_num = 0;
     for (auto syx : _syxs) {
-        if (file_str == syx.GetFilename()) {
-            return make_tuple(voice_num, file_num);
+        if (filename == syx.GetFilename()) {
+            return file_num;
         }
         ++file_num;
     };
-    throw runtime_error(string("ERROR: did not find file from config file."));
+    return -1; // not found
 }
 
 vector<uint8_t> DxSyx::GetVoiceData(int n) {
@@ -260,7 +290,7 @@ vector<uint8_t> DxSyxDB::GetVoiceData(const int voice_num, const int syx_num) {
 }
 
 
-void DxSyxDB::dump() {
+void DxSyxDB::DumpSyx() {
     auto lines = ReadConfigFile();
     
     // create syx file data buffer
