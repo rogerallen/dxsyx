@@ -2,15 +2,28 @@
 //  dxsyx.cpp
 //  dxsyx
 //
-//  Created by Roger Allen on 1/5/15.
-//  Copyright (c) 2015 Roger Allen. All rights reserved.
+// Created by Roger Allen on 1/5/15.
+// Copyright (c) 2015 Roger Allen. All rights reserved.
 //
+// Dxsyx is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Dxsyx is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Dxsyx.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "dxsyx.h"
 
 using namespace std;
 
 #include <fstream>
+#include <sstream>
 
 // ======================================================================
 DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
@@ -187,12 +200,94 @@ uint8_t DxSyx::GetDataCS()
     return d;
 }
 
+// ======================================================================
+vector<string> DxSyxDB::ReadConfigFile() {
+    vector<string> lines;
+    string line;
+    ifstream fl(DxSyxConfig::get().config_filename);
+    if(!fl.good()) {
+        throw runtime_error(string("ERROR: problem opening config file."));
+    }
+    while (getline (fl,line)) {
+        lines.push_back(line);
+    }
+    fl.close();
+    if(lines.size() != 32) {
+        throw runtime_error(string("ERROR: expecting only 32 lines in config file."));
+    }
+    return lines;
+}
+
+void DxSyxDB::WriteSyxFile(const uint8_t *data) {
+    ofstream fl(DxSyxConfig::get().output_filename, ios::out | ios::trunc | ios::binary);
+    if (!fl.is_open()) {
+        throw runtime_error(string("ERROR: problem opening syx output file."));
+    }
+    fl.write((const char *)data, SYX_FILE_SIZE);
+    fl.close();
+}
+
+tuple<int, int> DxSyxDB::DecodeConfigLine(const string &line) {
+    stringstream ss(line.substr(11));  // start after name+','
+    string voice_str, file_str;
+    getline(ss, voice_str, ',');
+    getline(ss, file_str, ',');
+    int voice_num, file_num = 0;
+    istringstream(voice_str) >> voice_num;
+    for (auto syx : _syxs) {
+        if (file_str == syx.GetFilename()) {
+            return make_tuple(voice_num, file_num);
+        }
+        ++file_num;
+    };
+    throw runtime_error(string("ERROR: did not find file from config file."));
+}
+
+vector<uint8_t> DxSyx::GetVoiceData(int n) {
+    vector<uint8_t> d;
+    for(int i = 0; i < 4096/32; ++i) {
+        d.push_back(_data[6+(n*4096/32)+i]);
+    }
+    return d;
+}
+
+string DxSyx::GetFilename() {
+    return _filename;
+}
+
+vector<uint8_t> DxSyxDB::GetVoiceData(const int voice_num, const int syx_num) {
+    return _syxs[syx_num].GetVoiceData(voice_num);
+}
+
+
 void DxSyxDB::dump() {
-    cerr << "FIXME dump syx file" << endl;
-    // read config file
-    // create syx buffer
+    auto lines = ReadConfigFile();
+    
+    // create syx file data buffer
+    uint8_t data[SYX_FILE_SIZE];
+    data[0] = 0xf0;
+    data[1] = 0x43;
+    data[2] = 0x00;
+    data[3] = 0x09;
+    data[4] = 0x20;
+    data[5] = 0x00;
+    data[SYX_FILE_SIZE-1] = 0xf7;
     // insert voices
+    auto i = 6, checksum = 0;
+    for (auto line : lines) {
+        auto voice_syx_nums = DecodeConfigLine(line);
+        for (auto d : GetVoiceData(get<0>(voice_syx_nums), get<1>(voice_syx_nums))) {
+            data[i++] = d;
+            checksum -= d;
+        }
+    }
+    if(i != SYX_FILE_SIZE-2) {
+        throw runtime_error(string("ERROR: did not write enough data to syx file."));
+    }
+    data[SYX_FILE_SIZE-2] = 0x7f & checksum;
+    
     // write out data
+    WriteSyxFile(data);
 }
 
 // ======================================================================
@@ -267,7 +362,7 @@ ostream& operator<<(ostream& os, const DxSyx& syx)
 {
     if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
-            os << i << "," << syx.syx_voices[i] << "," << syx._filename << endl;
+            os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
         }
     } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
         os << "--- " << endl;

@@ -2,9 +2,21 @@
 //  dxsyx.h
 //  dxsyx
 //
-//  Created by Roger Allen on 1/5/15.
-//  Copyright (c) 2015 Roger Allen. All rights reserved.
+// Created by Roger Allen on 1/5/15.
+// Copyright (c) 2015 Roger Allen. All rights reserved.
 //
+// Dxsyx is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Dxsyx is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Dxsyx.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef dxsyx_dxsyx_h
 #define dxsyx_dxsyx_h
@@ -131,6 +143,8 @@ class DxSyx {
 public:
     DxSyx(const char *filename);
     uint8_t GetDataCS();
+    std::vector<uint8_t> GetVoiceData(int n);
+    std::string GetFilename();
     
     friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
 };
@@ -138,7 +152,11 @@ public:
 // ======================================================================
 class DxSyxDB {
     std::vector<DxSyx> _syxs;
-    
+    std::vector<std::string> ReadConfigFile();
+    void WriteSyxFile(const uint8_t *data);
+    std::tuple<int, int> DecodeConfigLine(const std::string &line);
+    std::vector<uint8_t> GetVoiceData(const int voice_num, const int syx_num);
+
 public:
     DxSyxDB() {}; // default does nothing
     void add(const DxSyx &s) { _syxs.push_back(s); };
