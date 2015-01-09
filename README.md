@@ -31,7 +31,7 @@ This creates your custom my.syx file with your selected voices.
 
 ## Options
 
-    $ dxsyx [options] file1.syx file2.syx ...
+    $ dxsyx [options] [file1.syx file2.syx] ...
     
     none = print out voices
     -h = help (this message)
