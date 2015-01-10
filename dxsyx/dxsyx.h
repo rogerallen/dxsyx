@@ -28,6 +28,7 @@
 
 // This only handles 32-voice packed DX7 .syx files
 const int SYX_FILE_SIZE  = 4096 + 8;
+const int SYX_VOICE_SIZE = 4096/32;
 const int SYX_NUM_VOICES = 32;
 const int SYX_NUM_OSC    = 6;
 
@@ -36,7 +37,7 @@ class DxSyx;  // declare so Osc, Voice can use
 // ======================================================================
 // http://stackoverflow.com/questions/270947/can-any-one-provide-me-a-sample-of-singleton-in-c/271104#271104
 
-enum class DxSyxOutputMode { Full, Names, Syx };
+enum class DxSyxOutputMode { Breed, Full, Names, Syx };
 class DxSyxConfig
 {
 public:
@@ -132,6 +133,7 @@ class DxSyx {
        
     std::array<DxSyxVoice, SYX_NUM_VOICES> syx_voices;
     
+    void    Initialize(const std::string &filename);
     void    ReadFile(const std::string &filename);
     void    UnpackSyx();
     void    CheckHeader();
@@ -152,14 +154,17 @@ public:
 
 // ======================================================================
 class DxSyxDB {
-    std::vector<DxSyx> _syxs;
+    std::vector<DxSyx>  _syxs;
+    std::vector<std::string> _config_file_lines;
     
-    std::vector<std::string> ReadConfigFile();
+    void                     ReadConfigFile();
     void                     WriteSyxFile(const uint8_t *data);
     std::tuple<int, int>     DecodeConfigLine(const std::string &line);
     std::string              GetConfigLineFilename(const std::string &filename);
     std::vector<uint8_t>     GetVoiceData(const int voice_num, const int syx_num);
     int                      FilenameIndex(const std::string filename);
+    std::tuple<int, int>     GetRandomTuple(int max);
+    std::vector<uint8_t>     BreedVoiceData(int a, int b);
     void                     AddSyx(const DxSyx &s) {
         _syxs.push_back(s);
     };
@@ -167,6 +172,7 @@ class DxSyxDB {
 public:
     DxSyxDB();
     void DumpSyx();
+    void BreedSyx();
     
     friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
 };

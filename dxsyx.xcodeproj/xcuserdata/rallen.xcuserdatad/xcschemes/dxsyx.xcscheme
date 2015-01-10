@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-s /Users/rallen/Documents/Devel/xcode/dxsyx/test.config /Users/rallen/Documents/Devel/xcode/dxsyx/out3.syx"
+            argument = "/Users/rallen/Documents/Devel/xcode/dxsyx/out.syx"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

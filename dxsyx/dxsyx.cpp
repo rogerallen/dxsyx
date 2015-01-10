@@ -112,11 +112,14 @@ char DxSyxVoice::FixChar(char c) {
 
 // ======================================================================
 DxSyx::DxSyx(const char *filename) {
-    DxSyx(string(filename, strnlen(filename,1024)));
+    Initialize(string(filename, strnlen(filename,1024)));
 }
 
 DxSyx::DxSyx(const string &filename) {
-    //cerr << "reading " << filename << endl;
+    Initialize(filename);
+}
+
+void DxSyx::Initialize(const string &filename) {
     _filename       = filename;
     _cur_checksum   = 0;
     _cur_data_index = 0;
@@ -177,6 +180,19 @@ void DxSyx::UnpackVoice(int n) {
     syx_voices[n] = DxSyxVoice(*this);
 }
 
+vector<uint8_t> DxSyx::GetVoiceData(int n) {
+    vector<uint8_t> d;
+    for(int i = 0; i < SYX_VOICE_SIZE; ++i) {
+        d.push_back(_data[6+(n*SYX_VOICE_SIZE)+i]);
+    }
+    return d;
+}
+
+
+string DxSyx::GetFilename() {
+    return _filename;
+}
+
 void DxSyx::CheckCurrentSum() {
     uint8_t cur_masked_sum = 0x7f & _cur_checksum;
     uint8_t syx_expected_sum = GetData();
@@ -206,8 +222,8 @@ uint8_t DxSyx::GetDataCS()
 
 // ======================================================================
 DxSyxDB::DxSyxDB() {
-    auto lines = ReadConfigFile();
-    for (auto line : lines) {
+    ReadConfigFile();
+    for (auto line : _config_file_lines) {
         string syx_filename = GetConfigLineFilename(line);
         if (FilenameIndex(syx_filename) < 0) {
             AddSyx(DxSyx(syx_filename));
@@ -215,21 +231,19 @@ DxSyxDB::DxSyxDB() {
     }
 }
 
-vector<string> DxSyxDB::ReadConfigFile() {
-    vector<string> lines;
+void DxSyxDB::ReadConfigFile() {
     string line;
     ifstream fl(DxSyxConfig::get().config_filename);
     if(!fl.good()) {
         throw runtime_error(string("ERROR: problem opening config file."));
     }
     while (getline (fl,line)) {
-        lines.push_back(line);
+        _config_file_lines.push_back(line);
     }
     fl.close();
-    if(lines.size() != 32) {
-        throw runtime_error(string("ERROR: expecting only 32 lines in config file."));
+    if(_config_file_lines.size() > 32) {
+        throw runtime_error(string("ERROR: expecting up to 32 lines in config file."));
     }
-    return lines;
 }
 
 void DxSyxDB::WriteSyxFile(const uint8_t *data) {
@@ -273,26 +287,46 @@ int DxSyxDB::FilenameIndex(const string filename) {
     return -1; // not found
 }
 
-vector<uint8_t> DxSyx::GetVoiceData(int n) {
-    vector<uint8_t> d;
-    for(int i = 0; i < 4096/32; ++i) {
-        d.push_back(_data[6+(n*4096/32)+i]);
-    }
-    return d;
-}
-
-string DxSyx::GetFilename() {
-    return _filename;
-}
-
 vector<uint8_t> DxSyxDB::GetVoiceData(const int voice_num, const int syx_num) {
     return _syxs[syx_num].GetVoiceData(voice_num);
 }
 
+tuple<int, int> DxSyxDB::GetRandomTuple(int max) {
+    int a = rand() % max;
+    int b = rand() % max;
+    while (b == a) {
+        b = rand() % max;
+    }
+    return make_tuple(a, b);
+}
+
+vector<uint8_t> DxSyxDB::BreedVoiceData(int a, int b) {
+    auto voice_syx_numsA = DecodeConfigLine(_config_file_lines[a]);
+    auto voice_syx_numsB = DecodeConfigLine(_config_file_lines[b]);
+    vector<uint8_t> ad = GetVoiceData(get<0>(voice_syx_numsA),
+                                      get<1>(voice_syx_numsA));
+    vector<uint8_t> bd = GetVoiceData(get<0>(voice_syx_numsB),
+                                      get<1>(voice_syx_numsB));
+    vector<uint8_t> d;
+    for(int i = 0; i < SYX_VOICE_SIZE; ++i) {
+        if (i == 118) {
+            // encode parent A in 1st char of voice name
+            d.push_back((uint8_t)a + 48);
+        } else if (i == 119) {
+            // encode parent B in 2nd char of voice name
+            d.push_back((uint8_t)b + 48);
+        } else if(rand() > RAND_MAX/2) {
+            // otherwise a rand genome from A
+            d.push_back(ad[i]);
+        } else {
+            // or rand genome from B
+            d.push_back(bd[i]);
+        }
+    }
+    return d;
+}
 
 void DxSyxDB::DumpSyx() {
-    auto lines = ReadConfigFile();
-    
     // create syx file data buffer
     uint8_t data[SYX_FILE_SIZE];
     data[0] = 0xf0;
@@ -304,7 +338,7 @@ void DxSyxDB::DumpSyx() {
     data[SYX_FILE_SIZE-1] = 0xf7;
     // insert voices
     auto i = 6, checksum = 0;
-    for (auto line : lines) {
+    for (auto line : _config_file_lines) {
         auto voice_syx_nums = DecodeConfigLine(line);
         for (auto d : GetVoiceData(get<0>(voice_syx_nums), get<1>(voice_syx_nums))) {
             data[i++] = d;
@@ -313,6 +347,32 @@ void DxSyxDB::DumpSyx() {
     }
     if(i != SYX_FILE_SIZE-2) {
         throw runtime_error(string("ERROR: did not write enough data to syx file."));
+    }
+    data[SYX_FILE_SIZE-2] = 0x7f & checksum;
+    
+    // write out data
+    WriteSyxFile(data);
+}
+
+void DxSyxDB::BreedSyx() {
+    // create syx file data buffer
+    uint8_t data[SYX_FILE_SIZE];
+    data[0] = 0xf0;
+    data[1] = 0x43;
+    data[2] = 0x00;
+    data[3] = 0x09;
+    data[4] = 0x20;
+    data[5] = 0x00;
+    data[SYX_FILE_SIZE-1] = 0xf7;
+    // insert new voices
+    auto checksum = 0;
+    for (int i = 0; i < SYX_NUM_VOICES; ++i) {
+        auto random_parents = GetRandomTuple((int)_config_file_lines.size());
+        int j = 0;
+        for (auto d : BreedVoiceData(get<0>(random_parents), get<1>(random_parents))) {
+            data[6+i*SYX_VOICE_SIZE+j++] = d;
+            checksum -= d;
+        }
     }
     data[SYX_FILE_SIZE-2] = 0x7f & checksum;
     

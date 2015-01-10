@@ -30,10 +30,13 @@ void PrintUsage()
     cout << endl;
     cout << "usage:" << endl;
     cout << "  dxsyx [options] [file1.syx file2.syx ...]" << endl;
+    cout << endl;
     cout << "options:" << endl;
-    cout << "  -h = help (this message)" << endl;
-    cout << "  -v = print full data as YAML" << endl;
-    cout << "  -s = config.txt output.syx = select specific voices, output to new syx file" << endl;
+    cout << "  (none)                   : print out voices" << endl;
+    cout << "  -h                       : help (this message)" << endl;
+    cout << "  -v                       : print full data as YAML" << endl;
+    cout << "  -s config.txt output.syx : select specific voices, output to new syx file" << endl;
+    cout << "  -b config.txt output.syx : select specific voices, breed 32 random voices" << endl;
 }
 
 bool parse_arg(int &i, const char **argv)
@@ -44,6 +47,10 @@ bool parse_arg(int &i, const char **argv)
         DxSyxConfig::get().config_filename = argv[++i];
         DxSyxConfig::get().output_filename = argv[++i];
         DxSyxConfig::get().print_mode = DxSyxOutputMode::Syx;
+    } else if (argv[i][1] == 'b') {
+        DxSyxConfig::get().config_filename = argv[++i];
+        DxSyxConfig::get().output_filename = argv[++i];
+        DxSyxConfig::get().print_mode = DxSyxOutputMode::Breed;
     } else if (argv[i][1] == 'h') {
         PrintUsage();
         return false;
@@ -71,6 +78,9 @@ int main(int argc, const char * argv[])
         if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Syx) {
             DxSyxDB db;
             db.DumpSyx();
+        } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Breed) {
+            DxSyxDB db;
+            db.BreedSyx();
         }
         return 0;
     } catch (const runtime_error& error) {
