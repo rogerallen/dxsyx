@@ -19,6 +19,7 @@ Build via the Xcode project or Makefile.  Tested on Mac OS X, but should work wi
      (none)                   : print out voices
      -h                       : help (this message)
      -v                       : print full data as YAML
+     --                       : read filenames from stdin
      -s config.txt output.syx : select specific voices, output to new syx file
      -b config.txt output.syx : select specific voices, breed 32 random voices
 

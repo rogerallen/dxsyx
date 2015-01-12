@@ -35,11 +35,12 @@ void PrintUsage()
     cout << "  (none)                   : print out voices" << endl;
     cout << "  -h                       : help (this message)" << endl;
     cout << "  -v                       : print full data as YAML" << endl;
+    cout << "  --                       : read filenames from stdin" << endl;
     cout << "  -s config.txt output.syx : select specific voices, output to new syx file" << endl;
     cout << "  -b config.txt output.syx : select specific voices, breed 32 random voices" << endl;
 }
 
-bool parse_arg(int &i, const char **argv)
+bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
 {
     if (argv[i][1] == 'v') {
         DxSyxConfig::get().print_mode = DxSyxOutputMode::Full;
@@ -51,6 +52,8 @@ bool parse_arg(int &i, const char **argv)
         DxSyxConfig::get().config_filename = argv[++i];
         DxSyxConfig::get().output_filename = argv[++i];
         DxSyxConfig::get().print_mode = DxSyxOutputMode::Breed;
+    } else if (argv[i][1] == '-') {
+        read_from_stdin = true;
     } else if (argv[i][1] == 'h') {
         PrintUsage();
         return false;
@@ -65,13 +68,21 @@ bool parse_arg(int &i, const char **argv)
 int main(int argc, const char * argv[])
 {
     try {
+        bool read_from_stdin = false;
         for(int i = 1; i < argc; ++i) {
             if (argv[i][0] == '-') {
-                if(!parse_arg(i,argv)) {
+                if(!parse_arg(i,argv,read_from_stdin)) {
                     return 1;
                 }
             } else {
                 DxSyx d = DxSyx(argv[i]);
+                cout << d;
+            }
+        }
+        if (read_from_stdin) {
+            string line;
+            while (getline(cin, line)) {
+                DxSyx d = DxSyx(line);
                 cout << d;
             }
         }
