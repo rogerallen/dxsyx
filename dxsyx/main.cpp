@@ -65,6 +65,17 @@ bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
     return true;
 }
 
+template <typename T>
+void process_syx_file(T filename)
+{
+    try {
+        DxSyx d = DxSyx(filename);
+        cout << d;
+    } catch (const runtime_error& error) {
+        cout << "ERROR with " << filename << " " << error.what() << endl;
+    }
+}
+
 int main(int argc, const char * argv[])
 {
     try {
@@ -75,15 +86,13 @@ int main(int argc, const char * argv[])
                     return 1;
                 }
             } else {
-                DxSyx d = DxSyx(argv[i]);
-                cout << d;
+                process_syx_file(argv[i]);
             }
         }
         if (read_from_stdin) {
             string line;
             while (getline(cin, line)) {
-                DxSyx d = DxSyx(line);
-                cout << d;
+                process_syx_file(line);
             }
         }
         if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Syx) {
@@ -95,7 +104,7 @@ int main(int argc, const char * argv[])
         }
         return 0;
     } catch (const runtime_error& error) {
-        cout << error.what() << endl;
+        cout << "ERROR" << error.what() << endl;
         return 1;
     }
 }

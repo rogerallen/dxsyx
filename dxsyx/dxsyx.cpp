@@ -131,12 +131,12 @@ void DxSyx::ReadFile(const string &filename)
 {
     ifstream fl(filename, ifstream::in|ifstream::binary);
     if(!fl.good()) {
-        throw runtime_error(string("ERROR: problem opening file."));
+        throw runtime_error(string("problem opening file."));
     }
     fl.seekg( 0, ios::end );
     size_t len = fl.tellg();
     if(len != SYX_FILE_SIZE) {
-        throw runtime_error(string("ERROR: filesize not equal to 4096+8"));
+        throw runtime_error(string("filesize not equal to 4096+8"));
     }
     fl.seekg(0, ios::beg);
     fl.read((char *)_data, SYX_FILE_SIZE);
@@ -152,7 +152,6 @@ void DxSyx::UnpackSyx()
 
 void DxSyx::CheckHeader()
 {
-    
     uint8_t syx_status = GetData();
     uint8_t syx_id = GetData();
     uint8_t syx_sub_status_channel_num = GetData();
@@ -161,12 +160,14 @@ void DxSyx::CheckHeader()
     uint8_t syx_byte_count_ms = GetData();
     uint8_t syx_byte_count_ls = GetData();
     
-    if(!((syx_status        == 0xf0) &&
-         (syx_id            == 0x43) &&
-         (syx_format_number == 0x09) &&
-         (syx_byte_count_ms == 0x20) &&
-         (syx_byte_count_ls == 0x00))) {
-        throw runtime_error(string("ERROR: header mismatch from expected."));
+    if (syx_status != 0xf0) {
+        throw runtime_error(string("header status != 0xf0."));
+    } else if (syx_id != 0x43) {
+        throw runtime_error(string("header id != 0x43."));
+    } else if (syx_format_number != 0x09) {
+        throw runtime_error(string("header format != 0x09."));
+    } else if ((syx_byte_count_ms != 0x20) && (syx_byte_count_ls != 0x00)) {
+        throw runtime_error(string("header byte_count not 4k."));
     }
 }
 
@@ -198,13 +199,13 @@ void DxSyx::CheckCurrentSum() {
     uint8_t syx_expected_sum = GetData();
     uint8_t syx_status = GetData();
     if((cur_masked_sum != syx_expected_sum)) {
-        throw runtime_error(string("ERROR: bad checksum."));
+        throw runtime_error(string("bad checksum."));
     }
     if(syx_status != 0xf7) {
-        throw runtime_error(string("ERROR: bad end status."));
+        throw runtime_error(string("bad end status."));
     }
     if(_cur_data_index != SYX_FILE_SIZE) {
-        throw runtime_error(string("ERROR: EOF position."));
+        throw runtime_error(string("bad EOF position."));
     }
 }
 
@@ -235,21 +236,21 @@ void DxSyxDB::ReadConfigFile() {
     string line;
     ifstream fl(DxSyxConfig::get().config_filename);
     if(!fl.good()) {
-        throw runtime_error(string("ERROR: problem opening config file."));
+        throw runtime_error(string("problem opening config file."));
     }
     while (getline (fl,line)) {
         _config_file_lines.push_back(line);
     }
     fl.close();
     if(_config_file_lines.size() > 32) {
-        throw runtime_error(string("ERROR: expecting up to 32 lines in config file."));
+        throw runtime_error(string("expecting up to 32 lines in config file."));
     }
 }
 
 void DxSyxDB::WriteSyxFile(const uint8_t *data) {
     ofstream fl(DxSyxConfig::get().output_filename, ios::out | ios::trunc | ios::binary);
     if (!fl.is_open()) {
-        throw runtime_error(string("ERROR: problem opening syx output file."));
+        throw runtime_error(string("problem opening syx output file."));
     }
     fl.write((const char *)data, SYX_FILE_SIZE);
     fl.close();
@@ -265,7 +266,7 @@ tuple<int, int> DxSyxDB::DecodeConfigLine(const string &line) {
     if (file_num >= 0) {
         return make_tuple(voice_num, file_num);
     }
-    throw runtime_error(string("ERROR: did not find file from config file."));
+    throw runtime_error(string("did not find file referenced in config file."));
 }
 
 string DxSyxDB::GetConfigLineFilename(const string &line) {
@@ -346,7 +347,7 @@ void DxSyxDB::DumpSyx() {
         }
     }
     if(i != SYX_FILE_SIZE-2) {
-        throw runtime_error(string("ERROR: did not write enough data to syx file."));
+        throw runtime_error(string("did not write enough data to syx file."));
     }
     data[SYX_FILE_SIZE-2] = 0x7f & checksum;
     
