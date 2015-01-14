@@ -37,7 +37,7 @@ class DxSyx;  // declare so Osc, Voice can use
 // ======================================================================
 // http://stackoverflow.com/questions/270947/can-any-one-provide-me-a-sample-of-singleton-in-c/271104#271104
 
-enum class DxSyxOutputMode { Breed, Full, Names, Syx };
+enum class DxSyxOutputMode { Breed, Full, Names, NamesCrc, Syx };
 class DxSyxConfig
 {
 public:
@@ -145,16 +145,16 @@ class DxSyx {
 public:
     DxSyx(const char *filename);
     DxSyx(const std::string &filename);
-    uint8_t GetDataCS();
+    uint8_t              GetDataCS();
     std::vector<uint8_t> GetVoiceData(int n);
-    std::string GetFilename();
+    std::string          GetFilename();
     
-    friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
+    friend std::ostream& operator<<(std::ostream& os, DxSyx& syx);
 };
 
 // ======================================================================
 class DxSyxDB {
-    std::vector<DxSyx>  _syxs;
+    std::vector<DxSyx>       _syxs;
     std::vector<std::string> _config_file_lines;
     
     void                     ReadConfigFile();

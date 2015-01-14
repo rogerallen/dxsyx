@@ -24,6 +24,7 @@ using namespace std;
 
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 // ======================================================================
 DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
@@ -418,7 +419,8 @@ std::ostream& operator<<(std::ostream& os, const DxSyxOsc& syx)
 }
 
 std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx) {
-    if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
+    if ((DxSyxConfig::get().print_mode == DxSyxOutputMode::Names)||
+        (DxSyxConfig::get().print_mode == DxSyxOutputMode::NamesCrc)) {
         os << syx.syx_name;
     } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
             os << "  voice_name: " << syx.syx_name << endl;
@@ -449,10 +451,49 @@ std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx) {
     return os;
 }
 
-ostream& operator<<(ostream& os, const DxSyx& syx)
+// CRC code cribbed from
+// http://tools.ietf.org/html/rfc1952#section-8
+static uint32_t crc_table[256];
+static int crc_table_computed = 0;
+static void make_crc_table(void)
+{
+    uint32_t c;
+    
+    int n, k;
+    for (n = 0; n < 256; n++) {
+        c = (uint32_t) n;
+        for (k = 0; k < 8; k++) {
+            if (c & 1) {
+                c = 0xedb88320L ^ (c >> 1);
+            } else {
+                c = c >> 1;
+            }
+        }
+        crc_table[n] = c;
+    }
+    crc_table_computed = 1;
+}
+static uint32_t calc_crc(const vector<uint8_t> &data)
+{
+    uint32_t c = 0 ^ 0xffffffffL;
+    if (!crc_table_computed)
+        make_crc_table();
+    for (auto d: data) {
+        c = crc_table[(c ^ d) & 0xff] ^ (c >> 8);
+    }
+    return c ^ 0xffffffffL;
+}
+
+
+ostream& operator<<(ostream& os, DxSyx& syx)
 {
     if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
+            os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
+        }
+    } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::NamesCrc) {
+        for(int i = 0; i < SYX_NUM_VOICES; ++i) {
+            os << setfill('0') << setw(8) << hex << calc_crc(syx.GetVoiceData(i)) << ",";
             os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
         }
     } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {

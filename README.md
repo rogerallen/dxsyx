@@ -17,11 +17,12 @@ Build via the Xcode project or Makefile.  Tested on Mac OS X, but should work wi
      $ dxsyx [options] [file1.syx file2.syx] ...
      
      (none)                   : print out voices
-     -h                       : help (this message)
-     -v                       : print full data as YAML
      --                       : read filenames from stdin
-     -s config.txt output.syx : select specific voices, output to new syx file
      -b config.txt output.syx : select specific voices, breed 32 random voices
+     -c                       : print out voices with a unique voice data CRC
+     -h                       : help (this message)
+     -s config.txt output.syx : select specific voices, output to new syx file
+     -y                       : print full data as YAML
 
 ## Usage
 
@@ -38,7 +39,7 @@ The output from this command is the basis for all the config.txt files used as i
 
 If you want to see YAML-formatted individual settings for each voice:
 
-    $ dxysx -v file1.syx file2.syx
+    $ dxysx -y file1.syx file2.syx
 
 Here is a snippet:
 
