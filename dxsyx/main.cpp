@@ -20,6 +20,7 @@
 
 
 #include <iostream>
+#include <string>
 #include "dxsyx.h"
 
 using namespace std;

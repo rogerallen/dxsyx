@@ -135,7 +135,7 @@ void DxSyx::ReadFile(const string &filename)
         throw runtime_error(string("problem opening file."));
     }
     fl.seekg( 0, ios::end );
-    size_t len = fl.tellg();
+	streamoff len = fl.tellg();
     if(len != SYX_FILE_SIZE) {
         throw runtime_error(string("filesize not equal to 4096+8"));
     }
