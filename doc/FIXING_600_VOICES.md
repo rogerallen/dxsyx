@@ -11,7 +11,8 @@ http://homepages.abdn.ac.uk/mth192/pages/dx7/DX7600.ZIP
 Downloading and unzipping gives complaints from unzip for me.  Loading
 them in emacs in hexl-mode shows that they are _close_ to SYX files,
 but have a missing status byte and an extra couple bytes at the end.
-So, they wouldn't load in the dexed synth with those differences.
+So, they wouldn't load in the [dexed](http://asb2m10.github.io/dexed/)
+synth in [Reaper](http://www.reaper.fm/) with those issues.
 
 Fixing them turned out to be simple with dxsyx after I turned some
 errors into warnings.
