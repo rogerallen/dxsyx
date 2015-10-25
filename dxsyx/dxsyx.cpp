@@ -136,9 +136,11 @@ void DxSyx::ReadFile(const string &filename)
     }
     fl.seekg( 0, ios::end );
 	streamoff len = fl.tellg();
-    if(len != SYX_FILE_SIZE) {
-        throw runtime_error(string("filesize not equal to 4096+8"));
-    }
+    if(len < SYX_FILE_SIZE) {
+        throw runtime_error(string("filesize less than 4096+8 bytes."));
+    } else if (len > SYX_FILE_SIZE) {
+		cerr << "WARNING: filesize > 4096+8 bytes.  Ignoring the last " << (len - SYX_FILE_SIZE) << " bytes." << endl;
+	}
     fl.seekg(0, ios::beg);
     fl.read((char *)_data, SYX_FILE_SIZE);
     fl.close();
@@ -203,10 +205,10 @@ void DxSyx::CheckCurrentSum() {
         throw runtime_error(string("bad checksum."));
     }
     if(syx_status != 0xf7) {
-        throw runtime_error(string("bad end status."));
+        cerr << "WARNING: bad end status." << endl;
     }
     if(_cur_data_index != SYX_FILE_SIZE) {
-        throw runtime_error(string("bad EOF position."));
+		cerr << "WARNING: bad EOF position." << endl;
     }
 }
 
