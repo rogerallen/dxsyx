@@ -2,20 +2,18 @@
 
 dxsyx - a C++ library for manipulating DX7 SysEx files.
 
-I created this after using the Dexed VST in Reaper.  See https://github.com/asb2m10/dexed
-I wanted an easier way to create my own syx files after finding it difficult to keep track of the voices I found in the .syx files I found.
-One good source is http://homepages.abdn.ac.uk/mth192/pages/html/dx7.html
+I created this after using the Dexed VST in Reaper.  See https://github.com/asb2m10/dexed I wanted an easier way to create my own syx files after finding it difficult to keep track of the voices I found in the .syx files I found.  One good source is http://homepages.abdn.ac.uk/mth192/pages/html/dx7.html
 
 Plus, I was looking for a C++ project to check out C++11 coding.
 
 ## Installation
 
-Build via the Xcode project or Makefile.  Tested on Mac OS X, but should work with any C++11 compiler. 
+Build via the Xcode project, Visual Studio project or Makefile. Tested on Mac OS X and Windows 10, but should work with any C++11 compiler.
 
 ## Options
 
      $ dxsyx [options] [file1.syx file2.syx] ...
-     
+
      (none)                   : print out voices
      --                       : read filenames from stdin
      -b config.txt output.syx : select specific voices, breed 32 random voices
@@ -30,7 +28,7 @@ If you want to get a list of all voices in a syx file or files:
 
     $ dxsyx file1.syx file2.syx
 
-The output from this command is the basis for all the config.txt files used as input.  It is a CSV-formatted line for each voice containging first, the 10-character ASCII name (any chars < 32 are changed to '_'), next the voice number and finally the full path to the syx file containing the voice.
+The output from this command is the basis for all the config.txt files used as input.  It is a CSV-formatted line for each voice containing first, the 10-character ASCII name (any chars < 32 are changed to '_'), next the voice number and finally the full path to the syx file containing the voice.
 
     OEOEOE    ,0,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
     TAKINGOFF?,1,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
@@ -44,7 +42,7 @@ If you want to see YAML-formatted individual settings for each voice:
 Here is a snippet:
 
     filename: /Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
-      voice_name: OEOEOE    
+      voice_name: OEOEOE
         op6_eg_rate_1: 99
         op6_eg_rate_2: 99
         op6_eg_rate_3: 99
@@ -61,8 +59,8 @@ If you want to select voices and create your own syx file:
 
 Now, edit the lines of config.txt to leave only the 32 voices you desire (do not change any text or add any comments).
 
-    $ dxsyx -s config.txt my.syx 
-    
+    $ dxsyx -s config.txt my.syx
+
 This creates your custom my.syx file with your selected voices.
 
 Next, how about "breeding" your own sounds?  Create a config.txt file with the "parents" of the voices you would like to blend together.
