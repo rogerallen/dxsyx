@@ -49,12 +49,12 @@ public:
     std::string config_filename;
     std::string output_filename;
     DxSyxOutputMode print_mode = DxSyxOutputMode::Names;
-    
+
 private:
     DxSyxConfig() {}
     DxSyxConfig(DxSyxConfig const&);    // Don't Implement
     void operator=(DxSyxConfig const&); // Don't implement
-    
+
 };
 
 // ======================================================================
@@ -82,11 +82,11 @@ protected: // << operator needs to grab these
     uint8_t syx_osc_freq_coarse;
     uint8_t syx_osc_mode;
     uint8_t syx_osc_freq_fine;
-    
+
 public:
     DxSyxOsc() {} // default does nothing
     DxSyxOsc(const uint8_t osc_num, DxSyx &dx);
-    
+
     friend std::ostream& operator<<(std::ostream& os, const DxSyxOsc& syx);
 };
 
@@ -114,13 +114,13 @@ protected: // << operator needs to grab these
     uint8_t  syx_lfo_sync;
     uint8_t  syx_transpose;
     char     syx_name[11];
-    
+
     char FixChar(char c);
-    
+
 public:
     DxSyxVoice() {} // default does nothing
     DxSyxVoice(DxSyx &dx);
-    
+
     friend std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx);
 };
 
@@ -130,9 +130,9 @@ class DxSyx {
     uint8_t     _data[SYX_FILE_SIZE];
     int         _cur_checksum;
     uint32_t    _cur_data_index;
-       
+
     std::array<DxSyxVoice, SYX_NUM_VOICES> syx_voices;
-    
+
     void    Initialize(const std::string &filename);
     void    ReadFile(const std::string &filename);
     void    UnpackSyx();
@@ -141,14 +141,14 @@ class DxSyx {
     void    UnpackVoice(int n);
     void    CheckCurrentSum();
     uint8_t GetData();
-    
+
 public:
     DxSyx(const char *filename);
     DxSyx(const std::string &filename);
     uint8_t              GetDataCS();
     std::vector<uint8_t> GetVoiceData(int n);
     std::string          GetFilename();
-    
+
     friend std::ostream& operator<<(std::ostream& os, DxSyx& syx);
 };
 
@@ -156,7 +156,7 @@ public:
 class DxSyxDB {
     std::vector<DxSyx>       _syxs;
     std::vector<std::string> _config_file_lines;
-    
+
     void                     ReadConfigFile();
     void                     WriteSyxFile(const uint8_t *data);
     std::tuple<int, int>     DecodeConfigLine(const std::string &line);
@@ -173,7 +173,7 @@ public:
     DxSyxDB();
     void DumpSyx();
     void BreedSyx();
-    
+
     friend std::ostream& operator<<(std::ostream& os, const DxSyx& syx);
 };
 
