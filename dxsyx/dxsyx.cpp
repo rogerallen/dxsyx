@@ -18,13 +18,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Dxsyx.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "dxsyx.h"
-
-using namespace std;
-
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <string.h>
+#include "dxsyx.h"
+
+using namespace std;
 
 // ======================================================================
 DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {

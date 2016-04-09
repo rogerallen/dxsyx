@@ -24,6 +24,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <tuple>
 #include <vector>
 
 // This only handles 32-voice packed DX7 .syx files
