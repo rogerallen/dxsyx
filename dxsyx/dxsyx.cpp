@@ -18,13 +18,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Dxsyx.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "dxsyx.h"
-
-using namespace std;
-
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <string.h>
+#include "dxsyx.h"
+
+using namespace std;
 
 // ======================================================================
 DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
@@ -54,7 +54,7 @@ DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
     syx_osc_freq_coarse       = 0x1f & (tmp >> 1);
     syx_osc_mode              = 0x01 & tmp;
     syx_osc_freq_fine         = dx.GetDataCS();
-    
+
 }
 
 
@@ -104,7 +104,7 @@ char DxSyxVoice::FixChar(char c) {
         case 127: // >>
             return '>';
             break;
-            
+
         default:
             return c;
             break;
@@ -162,7 +162,7 @@ void DxSyx::CheckHeader()
     uint8_t syx_format_number = GetData();
     uint8_t syx_byte_count_ms = GetData();
     uint8_t syx_byte_count_ls = GetData();
-    
+
     if (syx_status != 0xf0) {
         throw runtime_error(string("header status != 0xf0."));
     } else if (syx_id != 0x43) {
@@ -353,7 +353,7 @@ void DxSyxDB::DumpSyx() {
         throw runtime_error(string("did not write enough data to syx file."));
     }
     data[SYX_FILE_SIZE-2] = 0x7f & checksum;
-    
+
     // write out data
     WriteSyxFile(data);
 }
@@ -379,7 +379,7 @@ void DxSyxDB::BreedSyx() {
         }
     }
     data[SYX_FILE_SIZE-2] = 0x7f & checksum;
-    
+
     // write out data
     WriteSyxFile(data);
 }
@@ -449,7 +449,7 @@ std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx) {
         os << "    lfo_sync: " << int(syx.syx_lfo_sync) << endl;
         os << "    transpose: " << int(syx.syx_transpose) << endl;
     }
-    
+
     return os;
 }
 
@@ -460,7 +460,7 @@ static int crc_table_computed = 0;
 static void make_crc_table(void)
 {
     uint32_t c;
-    
+
     int n, k;
     for (n = 0; n < 256; n++) {
         c = (uint32_t) n;

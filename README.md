@@ -8,7 +8,7 @@ Plus, I was looking for a C++ project to check out C++11 coding.
 
 ## Installation
 
-Build via the Xcode project, Visual Studio project or Makefile. Tested on Mac OS X and Windows 10, but should work with any C++11 compiler.
+Build via the Xcode project, Visual Studio project or Makefile. Tested on Mac OS X, Linux and Windows 10, but should work with any C++11 compiler.
 
 ## Options
 
