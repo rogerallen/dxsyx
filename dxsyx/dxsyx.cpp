@@ -201,7 +201,7 @@ void DxSyx::CheckCurrentSum() {
     uint8_t cur_masked_sum = 0x7f & _cur_checksum;
     uint8_t syx_expected_sum = GetData();
     uint8_t syx_status = GetData();
-    if((cur_masked_sum != syx_expected_sum)) {
+    if((cur_masked_sum != syx_expected_sum) && !DxSyxConfig::get().ignoreChecksum) {
         throw runtime_error(string("bad checksum."));
     }
     if(syx_status != 0xf7) {

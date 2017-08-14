@@ -38,6 +38,7 @@ void PrintUsage()
     cout << "  -b config.txt output.syx : select specific voices, breed 32 random voices" << endl;
     cout << "  -c                       : print out voices with a data CRC" << endl;
     cout << "  -h                       : help (this message)" << endl;
+    cout << "  -i                       : ignore checksum errors" << endl;
     cout << "  -s config.txt output.syx : select specific voices, output to new syx file" << endl;
     cout << "  -y                       : print full data as YAML" << endl;
 }
@@ -61,6 +62,8 @@ bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
     } else if (argv[i][1] == 'h') {
         PrintUsage();
         return false;
+    } else if (argv[i][1] == 'i') {
+        DxSyxConfig::get().ignoreChecksum = true;
     } else {
         cout << "ERROR: unknown option -" << argv[i][1] << endl;
         PrintUsage();

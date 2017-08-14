@@ -50,6 +50,7 @@ public:
     std::string config_filename;
     std::string output_filename;
     DxSyxOutputMode print_mode = DxSyxOutputMode::Names;
+    bool ignoreChecksum = false;
 
 private:
     DxSyxConfig() {}
