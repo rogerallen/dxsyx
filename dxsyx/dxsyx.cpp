@@ -21,10 +21,31 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include <string.h>
+#include <string>
 #include "dxsyx.h"
 
 using namespace std;
+
+namespace {
+    
+    static bool FindSyx(std::vector<uint8_t>::iterator from, std::vector<uint8_t>::iterator to,
+                        std::vector<uint8_t>::iterator& begin, std::vector<uint8_t>::iterator& end) {
+        begin = to;
+        end = to;
+        for (; from != to; ++from) {
+            if (*from == 0xf0) {
+                begin = from;
+                for (; from != to; ++from) {
+                    if (*from == 0xf7) {
+                        end = ++from;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
 
 // ======================================================================
 DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
@@ -56,7 +77,6 @@ DxSyxOsc::DxSyxOsc(const uint8_t osc_num, DxSyx &dx) {
     syx_osc_freq_fine         = dx.GetDataCS();
 
 }
-
 
 // ======================================================================
 DxSyxVoice::DxSyxVoice(DxSyx &dx) {
@@ -138,19 +158,35 @@ void DxSyx::ReadFile(const string &filename)
 	streamoff len = fl.tellg();
     if(len < SYX_FILE_SIZE) {
         throw runtime_error(string("filesize less than 4096+8 bytes."));
-    } else if (len > SYX_FILE_SIZE) {
-		cerr << "WARNING: filesize > 4096+8 bytes.  Ignoring the last " << (len - SYX_FILE_SIZE) << " bytes." << endl;
+    } else if (len > SYX_FILE_SIZE + SYX_MK2_ADDITIONAL_FILE_SIZE) {
+		cerr << "WARNING: filesize exceeds maximum expected size." << endl;
 	}
     fl.seekg(0, ios::beg);
-    fl.read((char *)_data, SYX_FILE_SIZE);
+    _filedata.resize(len);
+    fl.read((char*)&_filedata.front(), len);
     fl.close();
 }
 
 void DxSyx::UnpackSyx()
 {
-    CheckHeader();
-    UnpackVoices();
-    CheckCurrentSum();
+    auto dataBegin = _filedata.begin();
+    auto dataEnd = _filedata.end();
+    auto syxBegin = dataBegin;
+    auto syxEnd = dataBegin;
+    
+    while (FindSyx(dataBegin, dataEnd, syxBegin, syxEnd)) {
+        dataBegin = syxEnd;
+        if (syxEnd-syxBegin == SYX_FILE_SIZE) {
+            memcpy(_data,&*syxBegin,SYX_FILE_SIZE);
+            CheckHeader();
+            UnpackVoices();
+            CheckCurrentSum();
+        }
+        else if (syxEnd-syxBegin == SYX_MK2_ADDITIONAL_FILE_SIZE) {
+            _mk2data.assign(syxBegin,syxEnd);
+            UnpackMk2AdditionalParameters();
+        }
+    }
 }
 
 void DxSyx::CheckHeader()
@@ -184,7 +220,7 @@ void DxSyx::UnpackVoice(int n) {
     syx_voices[n] = DxSyxVoice(*this);
 }
 
-vector<uint8_t> DxSyx::GetVoiceData(int n) {
+vector<uint8_t> DxSyx::GetVoiceData(int n) const {
     vector<uint8_t> d;
     for(int i = 0; i < SYX_VOICE_SIZE; ++i) {
         d.push_back(_data[6+(n*SYX_VOICE_SIZE)+i]);
@@ -192,6 +228,9 @@ vector<uint8_t> DxSyx::GetVoiceData(int n) {
     return d;
 }
 
+const DxSyxVoice& DxSyx::GetVoice(int n) const {
+    return syx_voices[n];
+}
 
 string DxSyx::GetFilename() {
     return _filename;
@@ -233,6 +272,7 @@ DxSyxDB::DxSyxDB() {
             AddSyx(DxSyx(syx_filename));
         }
     }
+    ReadMk2ConfigFile();
 }
 
 void DxSyxDB::ReadConfigFile() {
@@ -250,12 +290,27 @@ void DxSyxDB::ReadConfigFile() {
     }
 }
 
-void DxSyxDB::WriteSyxFile(const uint8_t *data) {
+void DxSyxDB::ReadMk2ConfigFile() {
+    string line;
+    ifstream fl(DxSyxConfig::get().upgradeToMk2_config_filename);
+    if(!fl.good()) {
+        throw runtime_error(string("problem opening mk2 config file."));
+    }
+    while (getline (fl,line)) {
+        _mk2_config_file_lines.push_back(line);
+    }
+    fl.close();
+    if(_mk2_config_file_lines.size() != 32) {
+        throw runtime_error(string("expecting 32 lines in mk2 config file."));
+    }
+}
+
+void DxSyxDB::WriteSyxFile(const vector<uint8_t> &data) {
     ofstream fl(DxSyxConfig::get().output_filename, ios::out | ios::trunc | ios::binary);
     if (!fl.is_open()) {
         throw runtime_error(string("problem opening syx output file."));
     }
-    fl.write((const char *)data, SYX_FILE_SIZE);
+    fl.write(reinterpret_cast<const char*>(&data.front()), data.size());
     fl.close();
 }
 
@@ -332,7 +387,7 @@ vector<uint8_t> DxSyxDB::BreedVoiceData(int a, int b) {
 
 void DxSyxDB::DumpSyx() {
     // create syx file data buffer
-    uint8_t data[SYX_FILE_SIZE];
+    vector<uint8_t> data(SYX_FILE_SIZE);
     data[0] = 0xf0;
     data[1] = 0x43;
     data[2] = 0x00;
@@ -354,13 +409,33 @@ void DxSyxDB::DumpSyx() {
     }
     data[SYX_FILE_SIZE-2] = 0x7f & checksum;
 
+    if (!DxSyxConfig::get().upgradeToMk2_config_filename.empty()) {
+        checksum = 0;
+        data.push_back(0xf0);
+        data.push_back(0x43);
+        data.push_back(0x00);
+        data.push_back(0x06);
+        data.push_back(0x08);
+        data.push_back(0x60);
+        for (int i=0; i<SYX_NUM_VOICES; ++i) {
+            DxSyxVoice voice = _syxs[0].GetVoice(i);
+            DxSyxMk2AdditionalVoiceParameters mk2voice(voice,_mk2_config_file_lines[i]);
+            for (auto d : mk2voice.GetData()) {
+                data.push_back(d);
+                checksum -= d;
+            }
+        }
+        data.push_back(0x7f & checksum);
+        data.push_back(0xf7);
+    }
+    
     // write out data
     WriteSyxFile(data);
 }
 
 void DxSyxDB::BreedSyx() {
     // create syx file data buffer
-    uint8_t data[SYX_FILE_SIZE];
+    vector<uint8_t> data(SYX_FILE_SIZE);
     data[0] = 0xf0;
     data[1] = 0x43;
     data[2] = 0x00;
@@ -489,21 +564,25 @@ static uint32_t calc_crc(const vector<uint8_t> &data)
 
 ostream& operator<<(ostream& os, DxSyx& syx)
 {
-    if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Names) {
+    const DxSyxConfig& config = DxSyxConfig::get();
+    if (config.print_mode == DxSyxOutputMode::Names) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
             os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
         }
-    } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::NamesCrc) {
+    } else if (config.print_mode == DxSyxOutputMode::NamesCrc) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
             os << setfill('0') << setw(8) << hex << calc_crc(syx.GetVoiceData(i)) << ",";
             os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
         }
-    } else if (DxSyxConfig::get().print_mode == DxSyxOutputMode::Full) {
+    } else if (config.print_mode == DxSyxOutputMode::Full) {
         os << "--- " << endl;
         os << "filename: " << syx._filename << endl;
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
             os << syx.syx_voices[i];
-        }
+            if (!syx.mk2params.empty()) {
+                os << syx.mk2params[i];
+            }
+         }
     }
     return os;
 }

@@ -1,0 +1,18 @@
+The mk2config file is used to generate or modify DX7 mk2 (DX7s/DX7IID/DX7IIFD)
+additional voice parameters.
+For information about what each of these parameters means, and for the valid
+range of each value, please see the file dx7mk2-additional-sysex.txt in this
+project, or the DX7s owner’s manual. One copy can be found at:
+https://homepages.abdn.ac.uk/mth192/pages/dx7/manuals/dx7s-man.pdf
+
+Note: Although the amplitude modulation sensitivity for each oscillator
+(operator) is part of the additional parameters structure, it is normally copied
+(and optionally doubled) from the base DX7 voice data by the dxsyx program. If
+you want to override that behavior by supplying values here, however, you can do
+so.
+
+The mk2config file must have exactly 32 lines. Each line may have one or more of
+the following values. Any unspecified values will be left at zero (except for
+op?_amp_mod which is copied from the base voice):
+
+osc1_scale=0 osc2_scale=0 osc3_scale=0 osc4_scale=0 osc5_scale=0 osc6_scale=0 osc1_amp_mod=0 osc2_amp_mod=0 osc3_amp_mod=0 osc4_amp_mod=0 osc5_amp_mod=0 osc6_amp_mod=0 rnd_pitch=0 peg_vel_sw=0 lfo_key_trig=0 peg_range=0 pb_range=0 key_mode=0 pb_mode=0 pb_step=0 port_step=0 port_mode=0 port_time=0 mw_pmod=0 mw_amod=0 mw_eg_bias=0 fc1_pmod=0 fc1_amod=0 fc1_eg_bias=0 fc1_volume=0 bc_pmod=0 bc_amod=0 bc_eg_bias=0 bc_pitch_bias=0 at_pmod=0 at_amod=0 at_eg_bias=0 at_pitch_bias=0 peg_rate_scale=0 fc2_pmod=0 fc2_amod=0 fc2_eg_bias=0 fc2_volume=0 midi_ctrl_pmod=0 midi_ctrl_amod=0 midi_ctrl_eg_bias=0 midi_ctrl_volume=0 fc1_as_cs1=0 unison_detune=0 

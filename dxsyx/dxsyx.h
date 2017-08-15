@@ -26,6 +26,7 @@
 #include <iostream>
 #include <tuple>
 #include <vector>
+#include "mk2syx.h"
 
 // This only handles 32-voice packed DX7 .syx files
 const int SYX_FILE_SIZE  = 4096 + 8;
@@ -34,6 +35,7 @@ const int SYX_NUM_VOICES = 32;
 const int SYX_NUM_OSC    = 6;
 
 class DxSyx;  // declare so Osc, Voice can use
+class DxSyxMk2AdditionalVoiceParameters;
 
 // ======================================================================
 // http://stackoverflow.com/questions/270947/can-any-one-provide-me-a-sample-of-singleton-in-c/271104#271104
@@ -51,6 +53,8 @@ public:
     std::string output_filename;
     DxSyxOutputMode print_mode = DxSyxOutputMode::Names;
     bool ignoreChecksum = false;
+    bool mk2ScaleOscAmpMod = false;
+    std::string upgradeToMk2_config_filename;
 
 private:
     DxSyxConfig() {}
@@ -90,6 +94,7 @@ public:
     DxSyxOsc(const uint8_t osc_num, DxSyx &dx);
 
     friend std::ostream& operator<<(std::ostream& os, const DxSyxOsc& syx);
+    friend class DxSyxMk2AdditionalVoiceParameters;
 };
 
 // ======================================================================
@@ -124,16 +129,22 @@ public:
     DxSyxVoice(DxSyx &dx);
 
     friend std::ostream& operator<<(std::ostream& os, const DxSyxVoice& syx);
+    friend class DxSyxMk2AdditionalVoiceParameters;
 };
 
 // ======================================================================
 class DxSyx {
     std::string _filename;
+    std::vector<uint8_t>     _filedata;
+    
     uint8_t     _data[SYX_FILE_SIZE];
     int         _cur_checksum;
     uint32_t    _cur_data_index;
 
     std::array<DxSyxVoice, SYX_NUM_VOICES> syx_voices;
+    
+    std::vector<uint8_t> _mk2data;
+    std::vector<DxSyxMk2AdditionalVoiceParameters> mk2params;
 
     void    Initialize(const std::string &filename);
     void    ReadFile(const std::string &filename);
@@ -141,6 +152,7 @@ class DxSyx {
     void    CheckHeader();
     void    UnpackVoices();
     void    UnpackVoice(int n);
+    void    UnpackMk2AdditionalParameters();
     void    CheckCurrentSum();
     uint8_t GetData();
 
@@ -148,7 +160,8 @@ public:
     DxSyx(const char *filename);
     DxSyx(const std::string &filename);
     uint8_t              GetDataCS();
-    std::vector<uint8_t> GetVoiceData(int n);
+    std::vector<uint8_t> GetVoiceData(int n) const;
+    const DxSyxVoice&    GetVoice(int n) const;
     std::string          GetFilename();
 
     friend std::ostream& operator<<(std::ostream& os, DxSyx& syx);
@@ -158,9 +171,11 @@ public:
 class DxSyxDB {
     std::vector<DxSyx>       _syxs;
     std::vector<std::string> _config_file_lines;
+    std::vector<std::string> _mk2_config_file_lines;
 
     void                     ReadConfigFile();
-    void                     WriteSyxFile(const uint8_t *data);
+    void                     ReadMk2ConfigFile();
+    void                     WriteSyxFile(const std::vector<uint8_t> &data);
     std::tuple<int, int>     DecodeConfigLine(const std::string &line);
     std::string              GetConfigLineFilename(const std::string &filename);
     std::vector<uint8_t>     GetVoiceData(const int voice_num, const int syx_num);
