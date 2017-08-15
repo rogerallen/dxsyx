@@ -162,7 +162,7 @@ void DxSyx::ReadFile(const string &filename)
 		cerr << "WARNING: filesize exceeds maximum expected size." << endl;
 	}
     fl.seekg(0, ios::beg);
-    _filedata.resize(len);
+    _filedata.resize(static_cast<size_t>(len));
     fl.read((char*)&_filedata.front(), len);
     fl.close();
 }
