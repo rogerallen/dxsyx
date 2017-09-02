@@ -38,7 +38,10 @@ void PrintUsage()
     cout << "  -b config.txt output.syx : select specific voices, breed 32 random voices" << endl;
     cout << "  -c                       : print out voices with a data CRC" << endl;
     cout << "  -h                       : help (this message)" << endl;
+    cout << "  -i                       : ignore checksum errors" << endl;
     cout << "  -s config.txt output.syx : select specific voices, output to new syx file" << endl;
+    cout << "  -u mk2cfg.txt            : use mk2cfg.txt to upgrade to DX7 mk2 sysex (use with -s)" << endl;
+    cout << "  -U                       : when upgrading to DX7 mk2 sysex, double the osc amp mod values" << endl;
     cout << "  -y                       : print full data as YAML" << endl;
 }
 
@@ -61,6 +64,12 @@ bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
     } else if (argv[i][1] == 'h') {
         PrintUsage();
         return false;
+    } else if (argv[i][1] == 'i') {
+        DxSyxConfig::get().ignoreChecksum = true;
+    } else if (argv[i][1] == 'u') {
+        DxSyxConfig::get().upgradeToMk2_config_filename = argv[++i];
+    } else if (argv[i][1] == 'U') {
+        DxSyxConfig::get().mk2ScaleOscAmpMod = true;
     } else {
         cout << "ERROR: unknown option -" << argv[i][1] << endl;
         PrintUsage();
@@ -108,7 +117,7 @@ int main(int argc, const char * argv[])
         }
         return 0;
     } catch (const runtime_error& error) {
-        cout << "ERROR" << error.what() << endl;
+        cout << "ERROR: " << error.what() << endl;
         return 1;
     }
 }

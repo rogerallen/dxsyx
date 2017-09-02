@@ -19,7 +19,10 @@ Build via the Xcode project, Visual Studio project or Makefile. Tested on Mac OS
      -b config.txt output.syx : select specific voices, breed 32 random voices
      -c                       : print out voices with a unique voice data CRC
      -h                       : help (this message)
+     -i                       : ignore checksum errors
      -s config.txt output.syx : select specific voices, output to new syx file
+     -u mk2cfg.txt            : use mk2cfg.txt to upgrade to DX7 mk2 sysex (use with -s)
+     -U                       : when upgrading to DX7 mk2 sysex, double the osc amp mod values
      -y                       : print full data as YAML
 
 ## Usage
@@ -84,6 +87,10 @@ Mutants.txt might contain something like:
     12TALEB   ,31,mutants.syx
 
 Where the first two characters of the name indicate the parents of that voice.  These voices are completely random blends and might sound great or might sound awful.  Listen to the results, keep breeding from your best sounds and evolve your own, unique sounds!
+
+For DX7 mk2 (DX7s/DX7IID/DX7IIFD) users, you might find that DX7 bulk dumps are not very useful because the mk2 stores mod wheel and numerous other parameters in each voice, rather than as global parameters. You can use dxsyx to upgrade a DX7 dump by adding the additional parameters (for details, see the mk2cfg files in the doc folder):
+
+    $ dxsyx -u mk2cfg.txt -s config.txt mymk2.syx
 
 ## License
 

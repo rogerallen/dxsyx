@@ -112,9 +112,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\dxsyx\dxsyx.cpp" />
     <ClCompile Include="..\..\dxsyx\main.cpp" />
+    <ClCompile Include="..\..\dxsyx\mk2syx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dxsyx\dxsyx.h" />
+    <ClInclude Include="..\..\dxsyx\mk2syx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

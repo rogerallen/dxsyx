@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82DA3B631F42379400BB404E /* mk2syx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82DA3B611F42379400BB404E /* mk2syx.cpp */; };
 		E2B8A02B1A5BBBB6006AF942 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2B8A02A1A5BBBB6006AF942 /* main.cpp */; };
 		E2B8A0331A5BBCC6006AF942 /* dxsyx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2B8A0321A5BBCC6006AF942 /* dxsyx.cpp */; };
 /* End PBXBuildFile section */
@@ -24,8 +25,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		82DA3B601F412AB500BB404E /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = "<group>"; };
+		82DA3B611F42379400BB404E /* mk2syx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mk2syx.cpp; sourceTree = "<group>"; };
+		82DA3B621F42379400BB404E /* mk2syx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mk2syx.h; sourceTree = "<group>"; };
 		E20BFC2F1A5DF967005D457D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E20BFC301A5DF967005D457D /* dx7-sysex-format.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dx7-sysex-format.txt"; sourceTree = "<group>"; };
 		E2B8A0271A5BBBB6006AF942 /* dxsyx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dxsyx; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2B8A02A1A5BBBB6006AF942 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E2B8A0311A5BBC75006AF942 /* dxsyx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dxsyx.h; sourceTree = "<group>"; };
@@ -46,8 +49,8 @@
 		E2B8A01E1A5BBBB6006AF942 = {
 			isa = PBXGroup;
 			children = (
+				82DA3B601F412AB500BB404E /* doc */,
 				E20BFC2F1A5DF967005D457D /* README.md */,
-				E20BFC301A5DF967005D457D /* dx7-sysex-format.txt */,
 				E2B8A0291A5BBBB6006AF942 /* dxsyx */,
 				E2B8A0281A5BBBB6006AF942 /* Products */,
 			);
@@ -67,6 +70,8 @@
 				E2B8A02A1A5BBBB6006AF942 /* main.cpp */,
 				E2B8A0311A5BBC75006AF942 /* dxsyx.h */,
 				E2B8A0321A5BBCC6006AF942 /* dxsyx.cpp */,
+				82DA3B611F42379400BB404E /* mk2syx.cpp */,
+				82DA3B621F42379400BB404E /* mk2syx.h */,
 			);
 			path = dxsyx;
 			sourceTree = "<group>";
@@ -97,7 +102,7 @@
 		E2B8A01F1A5BBBB6006AF942 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Roger Allen";
 				TargetAttributes = {
 					E2B8A0261A5BBBB6006AF942 = {
@@ -127,6 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82DA3B631F42379400BB404E /* mk2syx.cpp in Sources */,
 				E2B8A0331A5BBCC6006AF942 /* dxsyx.cpp in Sources */,
 				E2B8A02B1A5BBBB6006AF942 /* main.cpp in Sources */,
 			);
@@ -148,8 +154,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -157,6 +165,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -189,8 +198,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
@@ -198,6 +209,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
