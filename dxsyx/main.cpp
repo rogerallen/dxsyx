@@ -63,7 +63,7 @@ bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
         read_from_stdin = true;
     } else if (argv[i][1] == 'h') {
         PrintUsage();
-        return false;
+        return true;
     } else if (argv[i][1] == 'i') {
         DxSyxConfig::get().ignoreChecksum = true;
     } else if (argv[i][1] == 'u') {
