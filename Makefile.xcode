@@ -6,6 +6,7 @@ EXECUTABLE=$(OUT_DIR)/dxsyx
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE):
+	xcodebuild -list -workspace dxsyx.xcodeproj/project.xcworkspace
 	xcodebuild -scheme dxsyx -workspace dxsyx.xcodeproj/project.xcworkspace build
 
 test:
