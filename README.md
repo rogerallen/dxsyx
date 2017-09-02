@@ -92,6 +92,10 @@ For DX7 mk2 (DX7s/DX7IID/DX7IIFD) users, you might find that DX7 bulk dumps are 
 
     $ dxsyx -u mk2cfg.txt -s config.txt mymk2.syx
 
+## Patches
+
+This pages contains a link that looks like the best, most comprehensive collection. (25MB as of 2017) http://bobbyblues.recup.ch/yamaha_dx7/dx7_patches.html
+
 ## License
 
 Copyright © 2015 Roger Allen
