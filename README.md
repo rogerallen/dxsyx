@@ -1,5 +1,7 @@
 # dxsyx
 
+[![Build Status](https://travis-ci.org/rogerallen/dxsyx.svg?branch=master)](https://travis-ci.org/rogerallen/dxsyx)
+
 dxsyx - a C++ library for manipulating DX7 SysEx files.
 
 I created this after using the Dexed VST in Reaper.  See https://github.com/asb2m10/dexed I wanted an easier way to create my own syx files after finding it difficult to keep track of the voices I found in the .syx files I found.  One good source is http://homepages.abdn.ac.uk/mth192/pages/html/dx7.html
