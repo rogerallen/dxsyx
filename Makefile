@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-c -Wall -std=gnu++11
 LDFLAGS=
-SOURCES=dxsyx/main.cpp dxsyx/dxsyx.cpp
-INCLUDES=dxsyx/dxsyx.h
+SOURCES=dxsyx/main.cpp dxsyx/dxsyx.cpp dxsyx/mk2syx.cpp
+INCLUDES=dxsyx/dxsyx.h dxsyx/mk2syx.h
 OBJECTS=$(SOURCES:.cpp=.o)
 OUT_DIR=bin
 EXECUTABLE=$(OUT_DIR)/dxsyx
