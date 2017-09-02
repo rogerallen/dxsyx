@@ -1,0 +1,16 @@
+dxsyx - a DX7 SYSEX file toolkit
+
+usage:
+  dxsyx [options] [file1.syx file2.syx ...]
+
+options:
+  (none)                   : print out voices
+  --                       : read filenames from stdin
+  -b config.txt output.syx : select specific voices, breed 32 random voices
+  -c                       : print out voices with a data CRC
+  -h                       : help (this message)
+  -i                       : ignore checksum errors
+  -s config.txt output.syx : select specific voices, output to new syx file
+  -u mk2cfg.txt            : use mk2cfg.txt to upgrade to DX7 mk2 sysex (use with -s)
+  -U                       : when upgrading to DX7 mk2 sysex, double the osc amp mod values
+  -y                       : print full data as YAML

@@ -8,7 +8,7 @@ OUT_DIR=bin
 EXECUTABLE=$(OUT_DIR)/dxsyx
 MKDIR_P = mkdir -p
 
-.PHONY: directories
+.PHONY: directories test
 
 all: directories $(SOURCES) $(EXECUTABLE)
 
@@ -23,5 +23,8 @@ $(EXECUTABLE): $(OBJECTS)
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
+test:
+	cd test && make
+
 clean:
-	rm $(OBJECTS) $(EXECUTABLE)
+	rm $(OBJECTS) $(EXECUTABLE) && cd test && make clean

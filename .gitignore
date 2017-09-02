@@ -49,7 +49,6 @@ dlldata.c
 *.tlh
 *.tmp
 *.tmp_proj
-*.log
 *.vspscc
 *.vssscc
 .builds
@@ -187,3 +186,9 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# gcc output
+dxsyx/*.o
+
+# test output
+test/current
