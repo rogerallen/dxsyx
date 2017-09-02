@@ -1,7 +1,10 @@
 # run tests and diff vs. golden output
-EXE=../bin/dxsyx
-DIFF=diff
-MKDIR_P = mkdir -p
+# allow override of EXE location for testing
+ifeq ($(EXE),)
+EXE := ../bin/dxsyx
+endif
+DIFF := diff
+MKDIR_P := mkdir -p
 
 # always cause the tests to run
 .PHONY: always

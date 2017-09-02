@@ -1,0 +1,16 @@
+OUT_DIR=Build/Products/Debug
+EXECUTABLE=$(OUT_DIR)/dxsyx
+
+.PHONY: test $(EXECUTABLE)
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE):
+	xcodebuild -scheme dxsyx -workspace dxsyx.xcodeproj/project.xcworkspace build
+
+test:
+	cd test && make EXE=../$(OUT_DIR)/dxsyx
+
+clean:
+	xcodebuild -scheme dxsyx -workspace dxsyx.xcodeproj/project.xcworkspace clean \
+		&& cd test && make clean
