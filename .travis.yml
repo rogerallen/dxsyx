@@ -6,6 +6,14 @@ matrix:
       env: MAKEFILE=Makefile
     - os: osx
       env: MAKEFILE=Makefile.xcode
-# need to fix linux to use gcc-4.9... (see issue #3)
-#    - os: linux
-#      env: MAKEFILE=Makefile
+    - os: linux
+      # complicated due to <regex> support
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+        - MAKEFILE=Makefile
+        - CXX=g++-4.9
