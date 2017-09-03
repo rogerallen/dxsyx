@@ -3,9 +3,13 @@ script: make -f ${MAKEFILE} && make -f ${MAKEFILE} test
 matrix:
   include:
     - os: osx
-      env: MAKEFILE=Makefile
+      env:
+        - MAKEFILE=Makefile
+        - MATRIX_EVAL=""
     - os: osx
-      env: MAKEFILE=Makefile.xcode
+      env:
+        - MAKEFILE=Makefile.xcode
+        - MATRIX_EVAL=""
     - os: linux
       # complicated due to <regex> support
       addons:
@@ -16,4 +20,6 @@ matrix:
             - g++-4.9
       env:
         - MAKEFILE=Makefile
-        - CXX=g++-4.9
+        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+before_install:
+    - eval "${MATRIX_EVAL}"
