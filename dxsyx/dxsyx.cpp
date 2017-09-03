@@ -273,7 +273,9 @@ DxSyxDB::DxSyxDB() {
             AddSyx(DxSyx(syx_filename));
         }
     }
-    ReadMk2ConfigFile();
+    if(DxSyxConfig::get().upgradeToMk2) {
+        ReadMk2ConfigFile();
+    }
 }
 
 void DxSyxDB::ReadConfigFile() {
