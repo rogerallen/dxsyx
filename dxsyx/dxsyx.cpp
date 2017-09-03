@@ -22,12 +22,13 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <cstring> // for strnlen, memcpy
 #include "dxsyx.h"
 
 using namespace std;
 
 namespace {
-    
+
     static bool FindSyx(std::vector<uint8_t>::iterator from, std::vector<uint8_t>::iterator to,
                         std::vector<uint8_t>::iterator& begin, std::vector<uint8_t>::iterator& end) {
         begin = to;
@@ -173,7 +174,7 @@ void DxSyx::UnpackSyx()
     auto dataEnd = _filedata.end();
     auto syxBegin = dataBegin;
     auto syxEnd = dataBegin;
-    
+
     while (FindSyx(dataBegin, dataEnd, syxBegin, syxEnd)) {
         dataBegin = syxEnd;
         if (syxEnd-syxBegin == SYX_FILE_SIZE) {
@@ -428,7 +429,7 @@ void DxSyxDB::DumpSyx() {
         data.push_back(0x7f & checksum);
         data.push_back(0xf7);
     }
-    
+
     // write out data
     WriteSyxFile(data);
 }
