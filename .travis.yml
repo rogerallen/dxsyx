@@ -6,5 +6,6 @@ matrix:
       env: MAKEFILE=Makefile
     - os: osx
       env: MAKEFILE=Makefile.xcode
-    - os: linux
-      env: MAKEFILE=Makefile
+# need to fix linux to use gcc-4.9... (see issue #3)
+#    - os: linux
+#      env: MAKEFILE=Makefile
