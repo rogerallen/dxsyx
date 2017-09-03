@@ -1,6 +1,10 @@
 language: c++
-env:
-  - MAKEFILE=Makefile
-  - MAKEFILE=Makefile.xcode
 script: make -f ${MAKEFILE} && make -f ${MAKEFILE} test
-os: osx
+matrix:
+  include:
+    - os: osx
+      env: MAKEFILE=Makefile
+    - os: osx
+      env: MAKEFILE=Makefile.xcode
+    - os: linux
+      env: MAKEFILE=Makefile
