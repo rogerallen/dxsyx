@@ -29,6 +29,7 @@
 		82DA3B611F42379400BB404E /* mk2syx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mk2syx.cpp; sourceTree = "<group>"; };
 		82DA3B621F42379400BB404E /* mk2syx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mk2syx.h; sourceTree = "<group>"; };
 		E20BFC2F1A5DF967005D457D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E22E82561F5C6A4400A2F279 /* dxsyx_xcode.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = dxsyx_xcode.xcconfig; sourceTree = "<group>"; };
 		E2B8A0271A5BBBB6006AF942 /* dxsyx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dxsyx; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2B8A02A1A5BBBB6006AF942 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E2B8A0311A5BBC75006AF942 /* dxsyx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dxsyx.h; sourceTree = "<group>"; };
@@ -49,6 +50,7 @@
 		E2B8A01E1A5BBBB6006AF942 = {
 			isa = PBXGroup;
 			children = (
+				E22E82561F5C6A4400A2F279 /* dxsyx_xcode.xcconfig */,
 				82DA3B601F412AB500BB404E /* doc */,
 				E20BFC2F1A5DF967005D457D /* README.md */,
 				E2B8A0291A5BBBB6006AF942 /* dxsyx */,
@@ -224,6 +226,7 @@
 		};
 		E2B8A02F1A5BBBB6006AF942 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E22E82561F5C6A4400A2F279 /* dxsyx_xcode.xcconfig */;
 			buildSettings = {
 				INSTALL_PATH = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -232,6 +235,7 @@
 		};
 		E2B8A0301A5BBBB6006AF942 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E22E82561F5C6A4400A2F279 /* dxsyx_xcode.xcconfig */;
 			buildSettings = {
 				INSTALL_PATH = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";

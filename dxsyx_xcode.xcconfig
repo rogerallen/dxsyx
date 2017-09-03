@@ -1,0 +1,19 @@
+//
+//  dxsyx_xcode.xcconfig
+//  dxsyx
+//
+//  Created by Roger Allen on 9/3/17.
+//  Copyright © 2017 Roger Allen. All rights reserved.
+//
+
+// Found help for this here:
+// https://stackoverflow.com/questions/11056547/how-to-change-output-directory-for-a-target
+
+// Intermediate build files go here
+PROJECT_TEMP_DIR = $(SRCROOT)/Build/$(PROJECT_NAME).build
+
+// Build-related files for the active build configuration go here
+CONFIGURATION_BUILD_DIR = $(SRCROOT)/Build/Products/$CONFIGURATION
+
+// The final product executables and other build products go here
+BUILT_PRODUCTS_DIR = $(SRCROOT)/Build/Products/$CONFIGURATION
