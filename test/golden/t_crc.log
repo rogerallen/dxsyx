@@ -1,0 +1,32 @@
+34181720,BRASS   1 ,0,data/ROM1A.syx
+f7b85075,BRASS   2 ,1,data/ROM1A.syx
+1d56c4ba,BRASS   3 ,2,data/ROM1A.syx
+bb5a80ff,STRINGS 1 ,3,data/ROM1A.syx
+7e4c43cf,STRINGS 2 ,4,data/ROM1A.syx
+77778985,STRINGS 3 ,5,data/ROM1A.syx
+5841a9c7,ORCHESTRA ,6,data/ROM1A.syx
+d4e7b491,PIANO   1 ,7,data/ROM1A.syx
+d13bfa5c,PIANO   2 ,8,data/ROM1A.syx
+e8029a59,PIANO   3 ,9,data/ROM1A.syx
+42bae127,E.PIANO 1 ,a,data/ROM1A.syx
+f7701dd8,GUITAR  1 ,b,data/ROM1A.syx
+eec4987b,GUITAR  2 ,c,data/ROM1A.syx
+11da0104,SYN-LEAD 1,d,data/ROM1A.syx
+6f555632,BASS    1 ,e,data/ROM1A.syx
+a4c2031c,BASS    2 ,f,data/ROM1A.syx
+0a1d4b5f,E.ORGAN 1 ,10,data/ROM1A.syx
+d006b9f0,PIPES   1 ,11,data/ROM1A.syx
+f7569940,HARPSICH 1,12,data/ROM1A.syx
+525c230d,CLAV    1 ,13,data/ROM1A.syx
+3f1878ac,VIBE    1 ,14,data/ROM1A.syx
+d6896522,MARIMBA   ,15,data/ROM1A.syx
+c06ba4db,KOTO      ,16,data/ROM1A.syx
+92547235,FLUTE   1 ,17,data/ROM1A.syx
+c4790cf2,ORCH-CHIME,18,data/ROM1A.syx
+566ecf77,TUB BELLS ,19,data/ROM1A.syx
+db2f6564,STEEL DRUM,1a,data/ROM1A.syx
+1931088c,TIMPANI   ,1b,data/ROM1A.syx
+9b3c4d3f,REFS WHISL,1c,data/ROM1A.syx
+a24eaade,VOICE   1 ,1d,data/ROM1A.syx
+c4f5af64,TRAIN     ,1e,data/ROM1A.syx
+930f817c,TAKE OFF  ,1f,data/ROM1A.syx
