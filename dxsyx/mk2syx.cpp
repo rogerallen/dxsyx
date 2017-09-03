@@ -19,6 +19,7 @@
 // along with Dxsyx.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <regex>
+#include <cstring> // for memset, memcpy
 #include "dxsyx.h"
 #include "mk2syx.h"
 
@@ -27,7 +28,7 @@ namespace {
         it++;
         return atoi(it->c_str());
     }
-    
+
     static bool AssignConfigValue(uint8_t& target, uint8_t max, std::vector<std::string>::const_iterator& it, uint8_t shift=0) {
         auto key = *it;
         auto val = GetConfigValue(it);
@@ -56,20 +57,20 @@ namespace {
 // NOTE: unlike DxSyxOsc and DxSyxVoice, this structure's layout is the same as the packed sysex data format
 DxSyxMk2AdditionalVoiceParameters::DxSyxMk2AdditionalVoiceParameters(const DxSyxVoice &voice, const std::string &configLine) {
     memset(this,0,sizeof(DxSyxMk2AdditionalVoiceParameters));
-    
+
     bc_pitch_bias = 50;
     at_pitch_bias = 50;
-    
+
     // NOTE: mk2ScaleOscAmpMod==true will change DX7 amp mod values 1,2,3 to DX7 mk2 amp mod values 2,4,6
     int scale = DxSyxConfig::get().mk2ScaleOscAmpMod ? 1 : 0;
-    
+
     osc_amp_mod_1_2 |= voice.syx_oscs[5].syx_amp_mod_sensitivity << (3 + scale);
     osc_amp_mod_1_2 |= voice.syx_oscs[4].syx_amp_mod_sensitivity << scale;
     osc_amp_mod_3_4 |= voice.syx_oscs[3].syx_amp_mod_sensitivity << (3 + scale);
     osc_amp_mod_3_4 |= voice.syx_oscs[2].syx_amp_mod_sensitivity << scale;
     osc_amp_mod_5_6 |= voice.syx_oscs[1].syx_amp_mod_sensitivity << (3 + scale);
     osc_amp_mod_5_6 |= voice.syx_oscs[0].syx_amp_mod_sensitivity << scale;
-    
+
    // std::string configLine("osc1_scale=0 osc2_scale=1 osc3_scale=0 osc4_scale=1 osc5_scale=0 osc6_scale=1 osc1_amp_mod=0 osc2_amp_mod=0 osc3_amp_mod=0 osc4_amp_mod=0 osc5_amp_mod=0 osc6_amp_mod=0 rnd_pitch=1 peg_vel_sw=1 lfo_key_trig=1 peg_range=2 pb_range=7 key_mode=3 pb_mode=1 pb_step=9 port_step=5 port_mode=1 port_time=70 mw_pmod=88 mw_amod=87 mw_eg_bias=86 fc1_pmod=85 fc1_amod=84 fc1_eg_bias=83 fc1_volume=82 bc_pmod=81 bc_amod=80 bc_eg_bias=79 bc_pitch_bias=78 at_pmod=77 at_amod=76 at_eg_bias=75 at_pitch_bias=74 peg_rate_scale=7 fc2_pmod=73 fc2_amod=72 fc2_eg_bias=71 fc2_volume=70 midi_ctrl_pmod=69 midi_ctrl_amod=68 midi_ctrl_eg_bias=67 midi_ctrl_volume=66 fc1_as_cs1=1 unison_detune=4");
     std::regex re("(=|,| )");
     std::sregex_token_iterator first{configLine.begin(),configLine.end(),re,-1};
@@ -337,7 +338,7 @@ std::ostream& operator<<(std::ostream& os, const DxSyxMk2AdditionalVoiceParamete
     os << "        midi_ctrl_volume: " << int(mk2params.midi_ctrl_volume) << std::endl;
     os << "        fc1_as_cs1: " << int(mk2params.fc1cs1_unidetune >> 3) << std::endl;
     os << "        unison_detune: " << int(mk2params.fc1cs1_unidetune & 0x7) << std::endl;
-    
+
     return os;
 }
 
