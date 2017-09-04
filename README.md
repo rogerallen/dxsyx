@@ -1,6 +1,6 @@
 # dxsyx
 
-[![Build Status](https://travis-ci.org/rogerallen/dxsyx.svg?branch=master)](https://travis-ci.org/rogerallen/dxsyx)
+[![Build Status](https://travis-ci.org/rogerallen/dxsyx.svg?branch=master)](https://travis-ci.org/rogerallen/dxsyx) [![Build status](https://ci.appveyor.com/api/projects/status/hsja1q41ridd7qxh?svg=true)](https://ci.appveyor.com/project/rogerallen/dxsyx)
 
 dxsyx - a C++ library for manipulating DX7 SysEx files.
 
