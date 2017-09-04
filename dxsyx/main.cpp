@@ -67,6 +67,7 @@ bool parse_arg(int &i, const char **argv, bool &read_from_stdin)
     } else if (argv[i][1] == 'i') {
         DxSyxConfig::get().ignoreChecksum = true;
     } else if (argv[i][1] == 'u') {
+        DxSyxConfig::get().upgradeToMk2 = true;
         DxSyxConfig::get().upgradeToMk2_config_filename = argv[++i];
     } else if (argv[i][1] == 'U') {
         DxSyxConfig::get().mk2ScaleOscAmpMod = true;

@@ -3,9 +3,23 @@ script: make -f ${MAKEFILE} && make -f ${MAKEFILE} test
 matrix:
   include:
     - os: osx
-      env: MAKEFILE=Makefile
+      env:
+        - MAKEFILE=Makefile
+        - MATRIX_EVAL=""
     - os: osx
-      env: MAKEFILE=Makefile.xcode
-# need to fix linux to use gcc-4.9... (see issue #3)
-#    - os: linux
-#      env: MAKEFILE=Makefile
+      env:
+        - MAKEFILE=Makefile.xcode
+        - MATRIX_EVAL=""
+    - os: linux
+      # complicated due to <regex> support
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+        - MAKEFILE=Makefile
+        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+before_install:
+    - eval "${MATRIX_EVAL}"

@@ -1,0 +1,32 @@
+BASS    1 ,0,current/t_select_mk2.syx
+BASS    2 ,1,current/t_select_mk2.syx
+BRASS   1 ,2,current/t_select_mk2.syx
+BRASS   2 ,3,current/t_select_mk2.syx
+BRASS   3 ,4,current/t_select_mk2.syx
+CLAV    1 ,5,current/t_select_mk2.syx
+E.ORGAN 1 ,6,current/t_select_mk2.syx
+E.PIANO 1 ,7,current/t_select_mk2.syx
+FLUTE   1 ,8,current/t_select_mk2.syx
+GUITAR  1 ,9,current/t_select_mk2.syx
+GUITAR  2 ,10,current/t_select_mk2.syx
+HARPSICH 1,11,current/t_select_mk2.syx
+KOTO      ,12,current/t_select_mk2.syx
+MARIMBA   ,13,current/t_select_mk2.syx
+ORCH-CHIME,14,current/t_select_mk2.syx
+ORCHESTRA ,15,current/t_select_mk2.syx
+PIANO   1 ,16,current/t_select_mk2.syx
+PIANO   2 ,17,current/t_select_mk2.syx
+PIANO   3 ,18,current/t_select_mk2.syx
+PIPES   1 ,19,current/t_select_mk2.syx
+REFS WHISL,20,current/t_select_mk2.syx
+STEEL DRUM,21,current/t_select_mk2.syx
+STRINGS 1 ,22,current/t_select_mk2.syx
+STRINGS 2 ,23,current/t_select_mk2.syx
+STRINGS 3 ,24,current/t_select_mk2.syx
+SYN-LEAD 1,25,current/t_select_mk2.syx
+TAKE OFF  ,26,current/t_select_mk2.syx
+TIMPANI   ,27,current/t_select_mk2.syx
+TRAIN     ,28,current/t_select_mk2.syx
+TUB BELLS ,29,current/t_select_mk2.syx
+VIBE    1 ,30,current/t_select_mk2.syx
+VOICE   1 ,31,current/t_select_mk2.syx

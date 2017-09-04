@@ -1,0 +1,32 @@
+BASS    1 ,0,current/t_select.syx
+BASS    2 ,1,current/t_select.syx
+BRASS   1 ,2,current/t_select.syx
+BRASS   2 ,3,current/t_select.syx
+BRASS   3 ,4,current/t_select.syx
+CLAV    1 ,5,current/t_select.syx
+E.ORGAN 1 ,6,current/t_select.syx
+E.PIANO 1 ,7,current/t_select.syx
+FLUTE   1 ,8,current/t_select.syx
+GUITAR  1 ,9,current/t_select.syx
+GUITAR  2 ,10,current/t_select.syx
+HARPSICH 1,11,current/t_select.syx
+KOTO      ,12,current/t_select.syx
+MARIMBA   ,13,current/t_select.syx
+ORCH-CHIME,14,current/t_select.syx
+ORCHESTRA ,15,current/t_select.syx
+PIANO   1 ,16,current/t_select.syx
+PIANO   2 ,17,current/t_select.syx
+PIANO   3 ,18,current/t_select.syx
+PIPES   1 ,19,current/t_select.syx
+REFS WHISL,20,current/t_select.syx
+STEEL DRUM,21,current/t_select.syx
+STRINGS 1 ,22,current/t_select.syx
+STRINGS 2 ,23,current/t_select.syx
+STRINGS 3 ,24,current/t_select.syx
+SYN-LEAD 1,25,current/t_select.syx
+TAKE OFF  ,26,current/t_select.syx
+TIMPANI   ,27,current/t_select.syx
+TRAIN     ,28,current/t_select.syx
+TUB BELLS ,29,current/t_select.syx
+VIBE    1 ,30,current/t_select.syx
+VOICE   1 ,31,current/t_select.syx

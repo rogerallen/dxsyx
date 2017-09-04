@@ -4,7 +4,8 @@ ifeq ($(EXE),)
 EXE := ../bin/dxsyx
 endif
 DIFF := diff
-MKDIR_P := mkdir -p
+MKDIR := mkdir
+WC := wc
 
 # always cause the tests to run
 .PHONY: always
@@ -13,7 +14,7 @@ all: current tests
 
 always:
 
-tests: t_help t_default t_stdin t_crc t_yml
+tests: t_help t_default t_stdin t_crc t_yml t_breed t_select t_select_mk2
 	@echo "======================================================================"
 	@echo "tests PASSED"
 
@@ -63,8 +64,37 @@ current/t_yml.log: $(EXE) always golden/t_yml.log
 t_yml: current/t_yml.log
 
 # ----------------------------------------------------------------------
+current/t_breed.syx: $(EXE) always data/t_config.txt
+	@echo "======================================================================"
+	@echo "t_breed: see if we can breed new voices (just not crashing)"
+	$(EXE) -b data/t_config.txt current/t_breed.syx
+	$(EXE) current/t_breed.syx | $(WC) -l
+
+t_breed: current/t_breed.syx
+
+# ----------------------------------------------------------------------
+current/t_select.log: $(EXE) always data/t_config.txt golden/t_select.log
+	@echo "======================================================================"
+	@echo "t_select: see if we can select voices for new syx file."
+	$(EXE) -s data/t_config.txt current/t_select.syx
+	$(EXE) current/t_select.syx > current/t_select.log
+	$(DIFF) golden/t_select.log current/t_select.log
+
+t_select: current/t_select.log
+
+# ----------------------------------------------------------------------
+current/t_select_mk2.log: $(EXE) always data/t_config.txt golden/t_select_mk2.log
+	@echo "======================================================================"
+	@echo "t_select_mk2: see if we can upgrade voices for new syx file."
+	$(EXE) -U -u ../doc/mk2cfg.test.txt -s data/t_config.txt current/t_select_mk2.syx
+	$(EXE) current/t_select_mk2.syx > current/t_select_mk2.log
+	$(DIFF) golden/t_select_mk2.log current/t_select_mk2.log
+
+t_select_mk2: current/t_select_mk2.log
+
+# ----------------------------------------------------------------------
 current:
-	$(MKDIR_P) current
+	$(MKDIR) -p current
 
 clean:
 	rm -rf current

@@ -54,6 +54,7 @@ public:
     DxSyxOutputMode print_mode = DxSyxOutputMode::Names;
     bool ignoreChecksum = false;
     bool mk2ScaleOscAmpMod = false;
+    bool upgradeToMk2 = false;
     std::string upgradeToMk2_config_filename;
 
 private:
@@ -136,13 +137,13 @@ public:
 class DxSyx {
     std::string _filename;
     std::vector<uint8_t>     _filedata;
-    
+
     uint8_t     _data[SYX_FILE_SIZE];
     int         _cur_checksum;
     uint32_t    _cur_data_index;
 
     std::array<DxSyxVoice, SYX_NUM_VOICES> syx_voices;
-    
+
     std::vector<uint8_t> _mk2data;
     std::vector<DxSyxMk2AdditionalVoiceParameters> mk2params;
 
