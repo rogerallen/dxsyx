@@ -570,12 +570,12 @@ ostream& operator<<(ostream& os, DxSyx& syx)
     const DxSyxConfig& config = DxSyxConfig::get();
     if (config.print_mode == DxSyxOutputMode::Names) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
-            os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
+            os << syx.syx_voices[i] << "," << i+1 << "," << syx._filename << endl;
         }
     } else if (config.print_mode == DxSyxOutputMode::NamesCrc) {
         for(int i = 0; i < SYX_NUM_VOICES; ++i) {
             os << setfill('0') << setw(8) << hex << calc_crc(syx.GetVoiceData(i)) << ",";
-            os << syx.syx_voices[i] << "," << i << "," << syx._filename << endl;
+            os << syx.syx_voices[i] << "," << dec << i+1 << "," << syx._filename << endl;
         }
     } else if (config.print_mode == DxSyxOutputMode::Full) {
         os << "--- " << endl;
