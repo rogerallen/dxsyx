@@ -325,7 +325,7 @@ tuple<int, int> DxSyxDB::DecodeConfigLine(const string &line) {
     int voice_num, file_num = FilenameIndex(file_str);
     istringstream(voice_str) >> voice_num;
     if (file_num >= 0) {
-        return make_tuple(voice_num, file_num);
+        return make_tuple(voice_num -1, file_num);
     }
     throw runtime_error(string("did not find file referenced in config file."));
 }
