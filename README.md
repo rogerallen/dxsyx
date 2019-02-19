@@ -35,9 +35,9 @@ If you want to get a list of all voices in a syx file or files:
 
 The output from this command is the basis for all the config.txt files used as input.  It is a CSV-formatted line for each voice containing first, the 10-character ASCII name (any chars < 32 are changed to '_'), next the voice number and finally the full path to the syx file containing the voice.
 
-    OEOEOE    ,0,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
-    TAKINGOFF?,1,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
-    CHOPPER   ,2,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
+    OEOEOE    ,1,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
+    TAKINGOFF?,2,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
+    CHOPPER   ,3,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
     ...
 
 If you want to see YAML-formatted individual settings for each voice:
@@ -76,17 +76,17 @@ Each of the 32 "mutants" you create will be a random blend of 2 random parents i
 
 If parents.txt contains:
 
-    DL RHODES3,30,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/road2.syx
-    METAL BOW ,19,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
-    RUMBLE    ,7,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
+    DL RHODES3,31,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/road2.syx
+    METAL BOW ,20,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
+    RUMBLE    ,8,/Users/rallen/Music/VST/dexed-0.8.0/Dexed_cart/Sysex/things.syx
 
 Mutants.txt might contain something like:
 
-    12MBLEBO  ,0,mutants.syx
-    01 ALODOW3,1,mutants.syx
-    20 BLE E 3,2,mutants.syx
+    12MBLEBO  ,1,mutants.syx
+    01 ALODOW3,2,mutants.syx
+    20 BLE E 3,3,mutants.syx
     ...
-    12TALEB   ,31,mutants.syx
+    12TALEB   ,32,mutants.syx
 
 Where the first two characters of the name indicate the parents of that voice.  These voices are completely random blends and might sound great or might sound awful.  Listen to the results, keep breeding from your best sounds and evolve your own, unique sounds!
 
